@@ -28,47 +28,47 @@ class CSUndoManager {
 public:
     CSUndoManager();
 
-	void registerUndoFunc(std::function<void()> f);
+    void registerUndoFunc(std::function<void()> f);
 
-	template<typename T>
-	void registerUndoFuncArg(std::function<void(T)> f, T arg) {
-		registerUndoFunc([f, arg]() { f(arg); });
-	}
+    template<typename T>
+    void registerUndoFuncArg(std::function<void(T)> f, T arg) {
+        registerUndoFunc([f, arg]() { f(arg); });
+    }
 
-	template<typename S, typename T>
-	void registerUndoFuncpArg2(void(*f)(S, T), S arg1, T arg2) {
-		registerUndoFunc([f, arg1, arg2]() { f(arg1, arg2); });
-	}
+    template<typename S, typename T>
+    void registerUndoFuncpArg2(void(*f)(S, T), S arg1, T arg2) {
+        registerUndoFunc([f, arg1, arg2]() { f(arg1, arg2); });
+    }
 
-	template<typename T>
-	void registerUndoTarget(T* target) {
-		T value = *target;
-		registerUndoFunc([target, value]() { *target = value; });
-	}
+    template<typename T>
+    void registerUndoTarget(T* target) {
+        T value = *target;
+        registerUndoFunc([target, value]() { *target = value; });
+    }
 
-	bool canUndo();
-	void undo();
-	bool canRedo();
-	void redo();
+    bool canUndo();
+    void undo();
+    bool canRedo();
+    void redo();
 private:
-	class UndoItem {
-	public:
-		std::function<void()> f;
-		UndoItem* next;
-		UndoItem(std::function<void()> fTMP, UndoItem* nextTMP) {
-			this->f = fTMP;
-			this->next = nextTMP;
-		}
-		~UndoItem() {
-			delete this->next;
-		}
-	};
+    class UndoItem {
+    public:
+        std::function<void()> f;
+        UndoItem* next;
+        UndoItem(std::function<void()> fTMP, UndoItem* nextTMP) {
+            this->f = fTMP;
+            this->next = nextTMP;
+        }
+        ~UndoItem() {
+            delete this->next;
+        }
+    };
 
-	UndoItem* undoStack;
-	UndoItem* redoStack;
+    UndoItem* undoStack;
+    UndoItem* redoStack;
 
-	bool isUndoing;
-	bool isRedoing;
+    bool isUndoing;
+    bool isRedoing;
 };
 
 

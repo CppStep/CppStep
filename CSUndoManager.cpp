@@ -22,46 +22,46 @@
 #include "CSUndoManager.hpp"
 
 CSUndoManager::CSUndoManager() {
-	undoStack = nullptr;
-	redoStack = nullptr;
-	isUndoing = false;
-	isRedoing = false;
+    undoStack = nullptr;
+    redoStack = nullptr;
+    isUndoing = false;
+    isRedoing = false;
 }
 
 void CSUndoManager::registerUndoFunc(std::function<void()> f) {
-	if (isUndoing) {
-		redoStack = new UndoItem(f, redoStack);
-	} else {
-		undoStack = new UndoItem(f, undoStack);
-		if (!this->isRedoing) {
-			delete redoStack;
-			redoStack = nullptr;
-		}
-	}
+    if (isUndoing) {
+        redoStack = new UndoItem(f, redoStack);
+    } else {
+        undoStack = new UndoItem(f, undoStack);
+        if (!this->isRedoing) {
+            delete redoStack;
+            redoStack = nullptr;
+        }
+    }
 }
 
 bool CSUndoManager::canUndo() {
-	return undoStack != nullptr;
+    return undoStack != nullptr;
 }
 
 void CSUndoManager::undo() {
-	if (undoStack != nullptr) {
-		isUndoing = true;
-		undoStack->f();
-		isUndoing = false;
-		undoStack = undoStack->next;
-	}
+    if (undoStack != nullptr) {
+        isUndoing = true;
+        undoStack->f();
+        isUndoing = false;
+        undoStack = undoStack->next;
+    }
 }
 
 bool CSUndoManager::canRedo() {
-	return redoStack != nullptr;
+    return redoStack != nullptr;
 }
 
 void CSUndoManager::redo() {
-	if (redoStack != nullptr) {
-		isRedoing = true;
-		redoStack->f();
-		isRedoing = false;
-		redoStack = redoStack->next;
-	}
+    if (redoStack != nullptr) {
+        isRedoing = true;
+        redoStack->f();
+        isRedoing = false;
+        redoStack = redoStack->next;
+    }
 }
