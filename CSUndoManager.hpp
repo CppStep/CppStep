@@ -2,7 +2,7 @@
 //  CSUndoManager.hpp
 //  CppStep
 //
-//  Copyright � 2017-18 Jonathan Tanner. All rights reserved.
+//  Copyright � 2018 Jonathan Tanner. All rights reserved.
 //
 //This file is part of CppStep.
 //
@@ -80,3 +80,4 @@ private:
 
 
 #endif /* CSUndoManager_hpp */
+
