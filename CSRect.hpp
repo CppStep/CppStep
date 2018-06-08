@@ -28,6 +28,23 @@ struct CSRect {
     double y;
     double width;
     double height;
+
+#if defined(CS_Mac)
+    typedef NSRect NativeRect;
+#elif defined(CS_Win)
+    typedef void NativeRect;
+#endif
+
+    NativeRect toNativeRect() {
+#if defined(CS_Mac)
+        return NSMakeRect(this->x,
+                          this->y,
+                          this->width,
+                          this->height
+                          );
+#elif defined(CS_Win)
+#endif
+    }
 };
 
 #endif /* CSRect_hpp */

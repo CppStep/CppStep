@@ -11,6 +11,8 @@
 
 #import <AppKit/AppKit.h>
 
+#include <string>
+
 @interface NSWindow (CSView)
 
 /** Initialise an NSWindow with the given C++ style arguments */

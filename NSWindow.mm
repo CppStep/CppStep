@@ -16,18 +16,18 @@
            isClosable:(bool)closable 
           isResizable:(bool)resizable
 {
-    if ( self = [super initWithContentRect: rect.toNativeRect()
-                                 styleMask: (NSWindowStyleMaskTitled * !title.isEmpty)
-                                          | (NSWindowStyleMaskClosable * closable)
-                                          | (NSWindowStyleMaskResizable * resizable)
-                                          | NSWindowStyleMaskMiniaturizable
-                              backingStore: NSBackingStoreBuffered
-                                     defer: NO
-                ] ) {
+    if ( self = [self initWithContentRect: rect.toNativeRect()
+                                styleMask: (NSWindowStyleMaskTitled * !title.empty())
+                                         | (NSWindowStyleMaskClosable * closable)
+                                         | (NSWindowStyleMaskResizable * resizable)
+                                         | NSWindowStyleMaskMiniaturizable
+                                  backing: NSBackingStoreBuffered
+                                    defer: NO
+                 ] ) {
         [self setReleasedWhenClosed: NO];
-        [self setContentView: view.toNativeView()];
+        [self setContentView: view->toNativeView()];
         [self setTitle: @(title.c_str())];
-        [self makeKeyAndOrderFront: self];
+        [self makeKeyAndOrderFront: nil];
         return self;
     } else {
         return nil;
