@@ -19,6 +19,8 @@
 //You should have received a copy of the GNU General Public License
 //along with CppStep.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "CSLabel.hpp"
+
 CSLabel::CSLabel(std::string text) {
 #if defined(CS_Mac)
     nativeView = [[NSTextField alloc] initWithFrame:NSZeroRect];
@@ -29,13 +31,11 @@ CSLabel::CSLabel(std::string text) {
     [nativeView setBackgroundColor:[NSColor clearColor]];
 #elif defined(CS_Win)
     nativeView = gcnew System::Windows::Forms::Label();
-    nativeView->Text = gcnew String(text.c_str());
+    nativeView->Text = gcnew System::String(text.c_str());
     nativeView->AutoSize = true;
 #endif
 }
 
-NativeView CSLabel::toNativeView() {
+CSView::NativeView CSLabel::toNativeView() {
     return this->nativeView;
 }
-
-#endif /* CSLabel_hpp */

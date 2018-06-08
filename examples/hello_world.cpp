@@ -1,5 +1,9 @@
-#include "CSLabel.hpp"
-#include "CSWindow.hpp"
+#define CS_Win
+
+#include "../CSLabel.hpp"
+#include "../CSWindow.hpp"
+
+#include <iostream>
 
 int main() {
     CSLabel* label = new CSLabel("Hello World");
@@ -9,5 +13,5 @@ int main() {
                                     true,
                                     true
                                     );
-    for (;;)
+    System::Windows::Forms::Application::Run();
 }

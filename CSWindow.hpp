@@ -30,7 +30,7 @@
 #import <AppKit/AppKit.h>
 #elif defined(CS_Win)
 #include "WinForm.hpp"
-#include "msclr\gcroot.h"
+#include <msclr\gcroot.h>
 #endif
 
 #include <string>

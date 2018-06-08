@@ -22,17 +22,20 @@
 #ifndef CSLabel_hpp
 #define CSLabel_hpp
 
+#include "CSView.hpp"
+
 #if defined(CS_Mac)
 #import <AppKit/AppKit.h>
 #elif defined(CS_Win)
+#using <System.dll>
 #using <System.Windows.Forms.dll>
-#include "msclr\gcroot"
+#include <msclr\gcroot.h>
 #endif
 
 #include <string>
 
 /** A view displaying a web page */
-class CSLabel {
+class CSLabel : public CSView {
 public:
     CSLabel(std::string text);
 
@@ -41,7 +44,7 @@ public:
 #elif defined(CS_Win)
     typedef msclr::gcroot<System::Windows::Forms::Label^> NativeView;
 #endif
-    virtual NativeView toNativeView();
+    virtual CSView::NativeView toNativeView();
 private:
     NativeView nativeView;
 };

@@ -22,25 +22,12 @@
 #ifndef CSRect_hpp
 #define CSRect_hpp
 
-#include "CSView.hpp"
-#include "CSRect.hpp"
-
-#if defined(CS_Mac)
-#include "NSWindow.h"
-#import <AppKit/AppKit.h>
-#elif defined(CS_Win)
-#include "WinForm.hpp"
-#include "msclr\gcroot.h"
-#endif
-
-#include <string>
-
 /** A rectangle */
 struct CSRect {
-    double x,
-    double y,
-    double width,
-    double height
-}
+    double x;
+    double y;
+    double width;
+    double height;
+};
 
 #endif /* CSRect_hpp */

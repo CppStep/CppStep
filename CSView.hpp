@@ -22,10 +22,21 @@
 #ifndef CSView_hpp
 #define CSView_hpp
 
+#if defined(CS_Mac)
+#import <AppKit/AppKit.h>
+#elif defined(CS_Win)
+#using <System.Windows.Forms.dll>
+#include <msclr\gcroot.h>
+#endif
+
 /** A view displaying a web page */
 class CSView {
 public:
-    typedef NSView* NativeView;
+    #if defined(CS_Mac)
+        typedef NSView* NativeView;
+    #elif defined(CS_Win)
+        typedef msclr::gcroot<System::Windows::Forms::Label^> NativeView;
+    #endif
     virtual NativeView toNativeView() = 0;
 };
 

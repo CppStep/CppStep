@@ -27,8 +27,8 @@ WinForm::WinForm(CSView* view,
                  bool closable,
                  bool resizable
                  ) {
-    this->Name = gcnew String(title.c_str());
-    this->Text = gcnew String(title.c_str());
+    this->Name = gcnew System::String(title.c_str());
+    this->Text = gcnew System::String(title.c_str());
     this->Size = System::Drawing::Size(rect.width, rect.height);
     this->StartPosition = System::Windows::Forms::FormStartPosition::Manual;
     this->Location = System::Drawing::Point(rect.x, rect.y);
@@ -43,13 +43,12 @@ WinForm::WinForm(CSView* view,
         this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
     }
 
-    this->Controls->Add(view->getNativeView());
+    this->Controls->Add(view->toNativeView());
 
     this->Show();
 }
 
-void CSWindow::presentView(CSView* view) {
+void WinForm::presentView(CSView* view) {
     this->Controls->Clear();
-    this->Controls->Add(view->getNativeView());
+    this->Controls->Add(view->toNativeView());
 }
-

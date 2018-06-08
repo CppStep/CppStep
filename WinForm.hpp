@@ -25,12 +25,14 @@
 #include "CSView.hpp"
 #include "CSRect.hpp"
 
+#using <System.dll>
+#using <System.Drawing.dll>
 #using <System.Windows.Forms.dll>
 
 #include <string>
 
 /** A C++ compatible subclass of a Windows Form object */
-class WinForm : public System::Windows::Forms::Form {
+ref class WinForm : public System::Windows::Forms::Form {
 public:
     WinForm(CSView* view,
             CSRect rect,

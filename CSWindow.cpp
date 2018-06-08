@@ -36,12 +36,12 @@ CSWindow::CSWindow(CSView* view,
                                         isResizable: resizable
                    ];
 #elif defined(CS_Win)
-    nativeWindow = CForm(view,
-                         rect,
-                         title,
-                         closable,
-                         resizable
-                         )
+    nativeWindow = gcnew WinForm(view,
+                           rect,
+                           title,
+                           closable,
+                           resizable
+                           );
 #endif
 }
 
@@ -50,8 +50,6 @@ void CSWindow::presentView(CSView* view) {
 #if defined(CS_Mac)
     [nativeWindow presentView: root];
 #elif defined(CS_Win)
-    nativeWindow->Controls->Clear();
-    nativeWindow->Controls->Add(nativeRoot);
+    nativeWindow->presentView(root);
 #endif
 }
-
