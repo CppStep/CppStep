@@ -22,6 +22,7 @@
 #ifndef CSWindow_hpp
 #define CSWindow_hpp
 
+#include "CSCore.hpp"
 #include "CSView.hpp"
 #include "CSRect.hpp"
 

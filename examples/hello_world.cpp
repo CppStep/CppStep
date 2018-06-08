@@ -1,17 +1,16 @@
 #include "../CSLabel.hpp"
 #include "../CSRect.hpp"
 #include "../CSWindow.hpp"
+#include "../CSApp.hpp"
 
 #include <iostream>
 
-#import <AppKit/AppKit.h>
-
-int main() {
 #if defined(CS_Mac)
-//    NSApplication* app = [NSApplication sharedApplication];
+#import <AppKit/AppKit.h>
 #elif defined(CS_Win)
 #endif
 
+int main() {
     CSLabel* label = new CSLabel("Hello World");
     CSRect size = {500, 500, 500, 500};
     CSWindow* window = new CSWindow(label,
@@ -20,9 +19,5 @@ int main() {
                                     true,
                                     true
                                     );
-#if defined(CS_Mac)
-    [[NSApplication sharedApplication] run];
-#elif defined(CS_Win)
-    System::Windows::Forms::Application::Run();
-#endif
+    CSAppRun();
 }

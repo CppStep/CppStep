@@ -1,5 +1,5 @@
 //
-//  CSView.hpp
+//  CSCore.hpp
 //  CppStep
 //
 //  Copyright � 2018 Jonathan Tanner. All rights reserved.
@@ -19,27 +19,13 @@
 //You should have received a copy of the GNU General Public License
 //along with CppStep.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef CSView_hpp
-#define CSView_hpp
+#ifndef CSCore_hpp
+#define CSCore_hpp
 
-#include "CSCore.hpp"
-
-#if defined(CS_Mac)
-#import <AppKit/AppKit.h>
-#elif defined(CS_Win)
-#using <System.Windows.Forms.dll>
-#include <msclr\gcroot.h>
+#if defined(TARGET_OS_MAC)
+#define CS_Mac
+#elif defined(_WIN32)
+#define CS_Win
 #endif
 
-/** A view displaying a web page */
-class CSView {
-public:
-    #if defined(CS_Mac)
-        typedef NSView* NativeView;
-    #elif defined(CS_Win)
-        typedef msclr::gcroot<System::Windows::Forms::Label^> NativeView;
-    #endif
-    virtual NativeView toNativeView() = 0;
-};
-
-#endif /* CSView_hpp */
+#endif /* CSCore_hpp */

@@ -22,6 +22,8 @@
 #ifndef CSRect_hpp
 #define CSRect_hpp
 
+#include "CSCore.hpp"
+
 /** A rectangle */
 struct CSRect {
     double x;

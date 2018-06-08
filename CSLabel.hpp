@@ -22,6 +22,7 @@
 #ifndef CSLabel_hpp
 #define CSLabel_hpp
 
+#include "CSCore.hpp"
 #include "CSView.hpp"
 
 #if defined(CS_Mac)

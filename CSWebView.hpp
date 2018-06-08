@@ -22,6 +22,8 @@
 #ifndef CSWebView_hpp
 #define CSWebView_hpp
 
+#include "CSCore.hpp"
+
 #include <string>
 
 #if defined(CS_Mac)
