@@ -37,7 +37,7 @@ public:
     #if defined(CS_Mac)
         typedef NSView* NativeView;
     #elif defined(CS_Win)
-        typedef msclr::gcroot<System::Windows::Forms::Label^> NativeView;
+        typedef msclr::gcroot<System::Windows::Forms::Control^> NativeView;
     #endif
     virtual NativeView toNativeView() = 0;
 };

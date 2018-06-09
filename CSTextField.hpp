@@ -32,6 +32,7 @@
 #using <System.dll>
 #using <System.Windows.Forms.dll>
 #include <msclr\gcroot.h>
+#include <msclr\marshal_cppstd.h>
 #endif
 
 #include <string>
@@ -41,6 +42,7 @@ class CSTextField : public CSView {
 public:
     CSTextField(CSRect rect);
 
+    std::string getText();
     void setText(std::string text);
 
 #if defined(CS_Mac)

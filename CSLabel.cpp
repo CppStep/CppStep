@@ -37,5 +37,9 @@ CSLabel::CSLabel(std::string text) {
 }
 
 CSView::NativeView CSLabel::toNativeView() {
-    return this->nativeView;
+  #if defined(CS_Mac)
+  return this->nativeView;
+  #elif defined(CS_Win)
+  return safe_cast<CSView::NativeView>(this->nativeView);
+  #endif
 }

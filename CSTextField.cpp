@@ -30,6 +30,14 @@ CSTextField::CSTextField(CSRect rect) {
 #endif
 }
 
+std::string CSTextField::getText() {
+  #if defined(CS_Mac)
+      return std::string([[nativeView stringValue] cStringUsingEncoding: NSUTF8StringEncoding]);
+  #elif defined(CS_Win)
+      return msclr::interop::marshal_as<std::string>(nativeView->Text);
+  #endif
+}
+
 void CSTextField::setText(std::string text) {
 #if defined(CS_Mac)
     [nativeView setStringValue: @(text.c_str())];
@@ -39,5 +47,9 @@ void CSTextField::setText(std::string text) {
 }
 
 CSView::NativeView CSTextField::toNativeView() {
-    return this->nativeView;
+  #if defined(CS_Mac)
+  return this->nativeView;
+  #elif defined(CS_Win)
+  return safe_cast<CSView::NativeView>(this->nativeView);
+  #endif
 }
