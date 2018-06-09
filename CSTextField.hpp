@@ -1,5 +1,5 @@
 //
-//  CSCore.hpp
+//  CSTextField.hpp
 //  CppStep
 //
 //  Copyright � 2018 Jonathan Tanner. All rights reserved.
@@ -19,13 +19,38 @@
 //You should have received a copy of the GNU General Public License
 //along with CppStep.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef CSCore_hpp
-#define CSCore_hpp
+#ifndef CSTextField_hpp
+#define CSTextField_hpp
 
-#if defined(__APPLE__)
-#define CS_Mac
-#elif defined(_WIN32)
-#define CS_Win
+#include "CSCore.hpp"
+#include "CSView.hpp"
+#include "CSRect.hpp"
+
+#if defined(CS_Mac)
+#import <AppKit/AppKit.h>
+#elif defined(CS_Win)
+#using <System.dll>
+#using <System.Windows.Forms.dll>
+#include <msclr\gcroot.h>
 #endif
 
-#endif /* CSCore_hpp */
+#include <string>
+
+/** A view displaying a text field */
+class CSTextField : public CSView {
+public:
+    CSTextField(CSRect rect);
+
+    void setText(std::string text);
+
+#if defined(CS_Mac)
+    typedef NSTextField* NativeView;
+#elif defined(CS_Win)
+    typedef msclr::gcroot<System::Windows::Forms::TextBox^> NativeView;
+#endif
+    virtual CSView::NativeView toNativeView();
+private:
+    NativeView nativeView;
+};
+
+#endif /* CSTextField_hpp */

@@ -17,7 +17,7 @@
           isResizable:(bool)resizable
 {
     if ( self = [self initWithContentRect: rect.toNativeRect()
-                                styleMask: (NSWindowStyleMaskTitled * !title.empty())
+                                styleMask: NSWindowStyleMaskTitled// * !title.empty())
                                          | (NSWindowStyleMaskClosable * closable)
                                          | (NSWindowStyleMaskResizable * resizable)
                                          | NSWindowStyleMaskMiniaturizable
