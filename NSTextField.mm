@@ -8,7 +8,7 @@
 
 #import "NSTextField.h"
 
-@implementation CSNSTextFieldCallback {
+@implementation CSTextFieldCallbacks {
     std::function<bool(std::string)> function;
 }
 
@@ -24,8 +24,8 @@
 
 @implementation NSTextField (CSCallbacks)
 
-- (void) setCallback:(std::function<void(std::string)>)callback {
-    [self setDelegate: [[CSNSTextFieldCallback alloc] initWithFunction: callback]];
+- (void) setCallback:(std::function<bool(std::string)>)callback {
+    [self setDelegate: [[CSTextFieldCallback alloc] initWithFunction: callback]];
 }
 
 @end

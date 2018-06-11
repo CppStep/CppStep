@@ -15,7 +15,6 @@
 int main() {
     CSApp::Init();
     CSLabel* label = new CSLabel("label");
-    std::cerr << label->getWidth() << std::endl;
     CSTextField* text = new CSTextField();
     text->setText("field");
     CSAlignView* align = new CSAlignView(CSAlignView::Direction::Horizontal);

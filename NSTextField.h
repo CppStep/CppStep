@@ -8,19 +8,19 @@
 
 #import <AppKit/AppKit.h>
 
-#include <function>
+#include <functional>
 #include <string>
 
-@interface CSNSTextFieldCallback (NSObject, NSTextFieldDelegate)
+@interface CSTextFieldCallback (NSObject, NSTextFieldDelegate)
 
-- (id) initWithFunction:(std::function<void(std::string)>)function; /**< Create a callbacks object with the given function */
+- (id) initWithFunction:(std::function<bool(std::string)>)function; /**< Create a callback object with the given function */
 
 - (BOOL)control:(NSControl*)control textShouldEndEditing:(NSText*)fieldEditor; /**< The text has been edited */
 
 @end
 
-@interface NSTextField (CSCallbacks)
+@interface NSTextField (CSCallback)
 
-- (void) setCallback:(std::function<void(std::string)>)callback;
+- (void) setCallback:(std::function<bool(std::string)>)callback;
 
 @end

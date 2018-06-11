@@ -8,7 +8,21 @@
 
 #import "NSWindow.h"
 
-@implementation NSWindow (CSView)
+@implementation CSTextFieldCallbacks {
+    std::function<void> function;
+}
+
+- (id) initWithFunction:(std::function<bool(std::string)>)functionTMP {
+    function = functionTMP;
+}
+
+- (void)windowDidResize:(NSNotification *)notification {
+    function();
+}
+
+@end
+
+@implementation NSWindow (CSWindow)
 
 - (id) initWithsize:(CSRect)rect
               title:(std::string)title
@@ -34,6 +48,10 @@
 
 - (void) presentView:(CSView*)view {
     [self setContentView: view->toNativeView()];
+}
+
+- (void) setCallback:(std::function<void()>)callback {
+    [self setDelegate: [[CSWindowCallback alloc] initWithFunction: callback]];
 }
 
 @end

@@ -31,9 +31,11 @@
 #import <AppKit/AppKit.h>
 #elif defined(CS_Win)
 #include "WinForm.hpp"
+#include "WinNativeEventHandler.hpp"
 #include <msclr\gcroot.h>
 #endif
 
+#include <functional>
 #include <string>
 
 /** A window containing a root view */

@@ -26,19 +26,24 @@ CSWindow::CSWindow(CSRect rect,
                    bool closable,
                    bool resizable
                    ) {
+    std::function<void()> relayoutF = std::bind(&CSWindow::relayout, this);
 #if defined(CS_Mac)
     nativeWindow = [[NSWindow alloc] initWithsize: rect
                                             title: title
                                        isClosable: closable
                                       isResizable: resizable
                    ];
+    [nativeWindow setCallback: relayoutF];
 #elif defined(CS_Win)
     nativeWindow = gcnew WinForm(rect,
                                  title,
                                  closable,
                                  resizable
                                  );
-#endif
+    WinNativeFunctionWrapper^ wrapper = gcnew WinNativeFunctionWrapper(relayoutF);
+    nativeWindow->ClientSizeChanged += gcnew System::EventHandler(wrapper, &WinNativeFunctionWrapper::callFunction);
+
+    #endif
 }
 
 void CSWindow::presentView(CSView* view) {

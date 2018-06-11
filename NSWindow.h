@@ -11,9 +11,18 @@
 
 #import <AppKit/AppKit.h>
 
+#include <functional>
 #include <string>
 
-@interface NSWindow (CSView)
+@interface CSWindowCallbacks (NSObject, NSWindowDelegate)
+
+- (id) initWithFunction:(std::function<void()>)function; /**< Create a callback object with the given function */
+
+- (void)windowDidResize:(NSNotification *)notification;
+
+@end
+
+@interface NSWindow (CSWindow)
 
 /** Initialise an NSWindow with the given C++ style arguments */
 - (id) initWithsize:(CSRect)rect
@@ -24,5 +33,8 @@
 
 /** Present the given CSView */
 - (void) presentView:(CSView*)view;
+
+/** Set the windowDidResize callback to the given function */
+- (void) setCallback:(std::function<void()>)callback;
 
 @end
