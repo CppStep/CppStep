@@ -1,5 +1,6 @@
 #include "../CSLabel.hpp"
 #include "../CSTextField.hpp"
+#include "../CSAlignView.hpp"
 #include "../CSRect.hpp"
 #include "../CSWindow.hpp"
 #include "../CSApp.hpp"
@@ -13,17 +14,18 @@
 
 int main() {
     CSApp::Init();
-    CSLabel* label = new CSLabel("Hello World");
-    CSRect textSize = {400, 400, 400, 400};
-    CSTextField* text = new CSTextField(textSize);
-    text->setText("hello");
-    CSRect size = {500, 500, 500, 500};
-    CSWindow* window = new CSWindow(text,
-                                    size,
+    CSLabel* label = new CSLabel("label");
+    CSTextField* text = new CSTextField();
+    text->setText("field");
+    CSAlignView* align = new CSAlignView(CSAlignView::Direction::Horizontal);
+    align->addView(label, false);
+    align->addView(text, true);
+    CSRect size = CSRect(0, 0, 500, 100);
+    CSWindow* window = new CSWindow(size,
                                     "Window",
                                     true,
                                     true
                                     );
+    window->presentView(align);
     CSApp::Run();
 }
-

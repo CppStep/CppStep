@@ -1,5 +1,5 @@
 //
-//  CSWindow.hpp
+//  CSSuperView.cpp
 //  CppStep
 //
 //  Copyright � 2018 Jonathan Tanner. All rights reserved.
@@ -19,45 +19,31 @@
 //You should have received a copy of the GNU General Public License
 //along with CppStep.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef CSWindow_hpp
-#define CSWindow_hpp
+#include "CSSuperView.hpp"
 
-#include "CSCore.hpp"
-#include "CSView.hpp"
-#include "CSRect.hpp"
-
+CSSuperView::CSSuperView(CSRect rect) {
 #if defined(CS_Mac)
-#include "NSWindow.h"
-#import <AppKit/AppKit.h>
+    nativeView = [[NSView alloc] initWithFrame:rect.toNativeRect()];
 #elif defined(CS_Win)
-#include "WinForm.hpp"
-#include <msclr\gcroot.h>
+    nativeView = gcnew System::Windows::Forms::Panel();
+    nativeView->Location = rect.origin.toNativePoint();
+    nativeView->Size = rect.size.toNativeSize();
 #endif
+}
 
-#include <string>
-
-/** A window containing a root view */
-class CSWindow {
-public:
-    CSWindow(CSRect rect,
-             std::string title,
-             bool closable,
-             bool resizable
-             );
-
-    void presentView(CSView* view);
-
-    void relayout();
-
+void CSSuperView::addView(CSView* subView) {
+    CSView::NativeView nativeSubView = subView->toNativeView();
 #if defined(CS_Mac)
-    typedef NSWindow* NativeWindow;
+    [nativeView addSubview: nativeSubView];
 #elif defined(CS_Win)
-    typedef msclr::gcroot<WinForm^> NativeWindow;
+    nativeView->Controls->Add(nativeSubView);
 #endif
+}
 
-private:
-    CSView* root;
-    NativeWindow nativeWindow;
-};
-
-#endif /* CSWindow_hpp */
+CSView::NativeView CSSuperView::toNativeView() {
+#if defined(CS_Mac)
+    return this->nativeView;
+#elif defined(CS_Win)
+    return safe_cast<CSView::NativeView>(this->nativeView);
+#endif
+}

@@ -24,27 +24,111 @@
 
 #include "CSCore.hpp"
 
-/** A rectangle */
-struct CSRect {
+#if defined(CS_Mac)
+#import <Foundation.h>
+#elif defined(CS_Win)
+#using <System.Drawing.dll>
+#include <msclr\gcroot.h>
+#endif
+
+/** A point */
+struct CSPoint {
     double x;
     double y;
+
+    CSPoint() : x(0), y(0) {}
+    CSPoint(double x, double y) : x(x), y(y) {}
+
+#if defined(CS_Mac)
+    typedef NSPoint NativePoint;
+#elif defined(CS_Win)
+    typedef System::Drawing::Point NativePoint;
+#endif
+
+    CSPoint(NativePoint point) {
+#if defined(CS_Mac)
+        this->x = point.x;
+        this->y = point.y;
+#elif defined(CS_Win)
+        this->x = point.X;
+        this->y = point.Y;
+#endif
+    }
+
+    NativePoint toNativePoint() {
+#if defined(CS_Mac)
+        return NSMakePoint(this->x,
+                           this->y
+                           );
+#elif defined(CS_Win)
+return System::Drawing::Point(this->x,
+                              this->y
+                              );
+#endif
+    }
+};
+
+/** A size */
+struct CSSize {
     double width;
     double height;
+
+    CSSize() : width(0), height(0) {}
+    CSSize(double w, double h) : width(w), height(h) {}
+
+#if defined(CS_Mac)
+    typedef NSSize NativeSize;
+#elif defined(CS_Win)
+    typedef System::Drawing::Size NativeSize;
+#endif
+
+    CSSize(NativeSize size) {
+#if defined(CS_Mac)
+        this->width = size.width;
+        this->height = size.height;
+#elif defined(CS_Win)
+        this->width = size.Width;
+        this->height = size.Height;
+#endif
+    }
+
+    NativeSize toNativeSize() {
+#if defined(CS_Mac)
+        return NSMakeSize(this->width,
+                          this->height
+                          );
+#elif defined(CS_Win)
+        return System::Drawing::Size(this->width,
+                                     this->height
+                                     );
+#endif
+    }
+};
+
+/** A rectangle */
+struct CSRect {
+    CSPoint origin;
+    CSSize size;
+
+    CSRect() : origin(), size() {}
+    CSRect(CSPoint o, CSSize s) : origin(o), size(s) {}
+    CSRect(double x, double y, double w, double h) : CSRect(CSPoint(x, y), CSSize(w, h)) {}
 
 #if defined(CS_Mac)
     typedef NSRect NativeRect;
 #elif defined(CS_Win)
-    typedef void NativeRect;
+    typedef CSRect NativeRect;
 #endif
 
     NativeRect toNativeRect() {
 #if defined(CS_Mac)
-        return NSMakeRect(this->x,
-                          this->y,
-                          this->width,
-                          this->height
+        return NSMakeRect(this->origin->x,
+                          this->origin->y,
+                          this->size->width,
+                          this->size->height
                           );
 #elif defined(CS_Win)
+        return *this;
 #endif
     }
 };

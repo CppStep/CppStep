@@ -23,10 +23,12 @@
 #define CSView_hpp
 
 #include "CSCore.hpp"
+#include "CSRect.hpp"
 
 #if defined(CS_Mac)
 #import <AppKit/AppKit.h>
 #elif defined(CS_Win)
+#using <System.dll>
 #using <System.Windows.Forms.dll>
 #include <msclr\gcroot.h>
 #endif
@@ -34,6 +36,27 @@
 /** A view displaying a web page */
 class CSView {
 public:
+    CSRect getRect();
+    void setRect(CSRect rect);
+
+    CSSize getSize();
+    void setSize(CSSize size);
+
+    double getWidth() { return getSize().width; }
+    double getHeight() { return getSize().height; }
+    void setWidth(double width) { setSize(CSSize(width, getHeight())); }
+    void setHeight(double height) { setSize(CSSize(getWidth(), height)); }
+
+    CSPoint getOrigin();
+    void setOrigin(CSPoint origin);
+
+    double getX() { return getOrigin().x; }
+    double getY() { return getOrigin().y; }
+    void setX(double x) { setOrigin(CSPoint(x, getY())); }
+    void setY(double y) { setOrigin(CSPoint(getX(), y)); }
+
+    virtual void relayout() {}
+
     #if defined(CS_Mac)
         typedef NSView* NativeView;
     #elif defined(CS_Win)

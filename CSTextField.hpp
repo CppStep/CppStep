@@ -40,6 +40,7 @@
 /** A view displaying a text field */
 class CSTextField : public CSView {
 public:
+    CSTextField() : CSTextField(CSRect()) {}
     CSTextField(CSRect rect);
 
     std::string getText();

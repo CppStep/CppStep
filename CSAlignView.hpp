@@ -1,5 +1,5 @@
 //
-//  CSWindow.hpp
+//  CSAlignView.hpp
 //  CppStep
 //
 //  Copyright � 2018 Jonathan Tanner. All rights reserved.
@@ -19,45 +19,48 @@
 //You should have received a copy of the GNU General Public License
 //along with CppStep.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef CSWindow_hpp
-#define CSWindow_hpp
+#ifndef CSAlignView_hpp
+#define CSAlignView_hpp
 
 #include "CSCore.hpp"
 #include "CSView.hpp"
-#include "CSRect.hpp"
+#include "CSSuperView.hpp"
 
 #if defined(CS_Mac)
-#include "NSWindow.h"
 #import <AppKit/AppKit.h>
 #elif defined(CS_Win)
-#include "WinForm.hpp"
+#using <System.dll>
+#using <System.Windows.Forms.dll>
 #include <msclr\gcroot.h>
 #endif
 
-#include <string>
+#include <vector>
+#include <utility>
+#include <algorithm>
+#include <numeric>
 
-/** A window containing a root view */
-class CSWindow {
+/** A view displaying a web page */
+class CSAlignView : public CSView {
 public:
-    CSWindow(CSRect rect,
-             std::string title,
-             bool closable,
-             bool resizable
-             );
+    enum class Direction {Horizontal, Vertical};
 
-    void presentView(CSView* view);
+    CSAlignView(Direction dir) : CSAlignView(CSRect(), dir) {}
+    CSAlignView(CSRect rect, Direction dir);
 
-    void relayout();
+    void addView(CSView* subView, bool expanding);
 
-#if defined(CS_Mac)
-    typedef NSWindow* NativeWindow;
-#elif defined(CS_Win)
-    typedef msclr::gcroot<WinForm^> NativeWindow;
-#endif
+    virtual void relayout();
 
+    typedef CSSuperView::NativeView NativeView;
+    virtual CSView::NativeView toNativeView();
 private:
-    CSView* root;
-    NativeWindow nativeWindow;
+    Direction dir;
+
+    std::vector<std::pair<CSView*, bool>> subViews;
+
+    CSSuperView* superView;
+
+    double fixedLength;
 };
 
-#endif /* CSWindow_hpp */
+#endif /* CSAlignView_hpp */

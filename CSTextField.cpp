@@ -27,6 +27,8 @@ CSTextField::CSTextField(CSRect rect) {
     [nativeView setEditable:YES];
 #elif defined(CS_Win)
     nativeView = gcnew System::Windows::Forms::TextBox();
+    nativeView->Location = rect.origin.toNativePoint();
+    nativeView->Size = rect.size.toNativeSize();
 #endif
 }
 

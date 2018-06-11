@@ -11,7 +11,7 @@
 #include <function>
 #include <string>
 
-@interface CSCallback (NSObject, NSTextFieldDelegate)
+@interface CSNSTextFieldCallback (NSObject, NSTextFieldDelegate)
 
 - (id) initWithFunction:(std::function<void(std::string)>)function; /**< Create a callbacks object with the given function */
 

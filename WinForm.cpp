@@ -21,17 +21,16 @@
 
 #include "WinForm.hpp"
 
-WinForm::WinForm(CSView* view,
-                 CSRect rect,
+WinForm::WinForm(CSRect rect,
                  std::string title,
                  bool closable,
                  bool resizable
                  ) {
     this->Name = gcnew System::String(title.c_str());
     this->Text = gcnew System::String(title.c_str());
-    this->Size = System::Drawing::Size(rect.width, rect.height);
+    this->Size = rect.size.toNativeSize();
     this->StartPosition = System::Windows::Forms::FormStartPosition::Manual;
-    this->Location = System::Drawing::Point(rect.x, rect.y);
+    this->Location = rect.origin.toNativePoint();
 
     if (!closable) {
         this->ControlBox = false;
@@ -42,8 +41,6 @@ WinForm::WinForm(CSView* view,
     } else {
         this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
     }
-
-    this->Controls->Add(view->toNativeView());
 
     this->Show();
 }

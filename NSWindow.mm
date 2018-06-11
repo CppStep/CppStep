@@ -10,11 +10,10 @@
 
 @implementation NSWindow (CSView)
 
-- (id) initWithCSView:(CSView*)view
-                 size:(CSRect)rect
-                title:(std::string)title 
-           isClosable:(bool)closable 
-          isResizable:(bool)resizable
+- (id) initWithsize:(CSRect)rect
+              title:(std::string)title
+         isClosable:(bool)closable
+        isResizable:(bool)resizable
 {
     if ( self = [self initWithContentRect: rect.toNativeRect()
                                 styleMask: NSWindowStyleMaskTitled// * !title.empty())
@@ -25,7 +24,6 @@
                                     defer: NO
                  ] ) {
         [self setReleasedWhenClosed: NO];
-        [self setContentView: view->toNativeView()];
         [self setTitle: @(title.c_str())];
         [self makeKeyAndOrderFront: nil];
         return self;

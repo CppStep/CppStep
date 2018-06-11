@@ -1,5 +1,5 @@
 //
-//  CSWindow.hpp
+//  CSSuperView.hpp
 //  CppStep
 //
 //  Copyright � 2018 Jonathan Tanner. All rights reserved.
@@ -19,45 +19,36 @@
 //You should have received a copy of the GNU General Public License
 //along with CppStep.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef CSWindow_hpp
-#define CSWindow_hpp
+#ifndef CSSuperView_hpp
+#define CSSuperView_hpp
 
 #include "CSCore.hpp"
 #include "CSView.hpp"
-#include "CSRect.hpp"
 
 #if defined(CS_Mac)
-#include "NSWindow.h"
 #import <AppKit/AppKit.h>
 #elif defined(CS_Win)
-#include "WinForm.hpp"
+#using <System.dll>
+#using <System.Windows.Forms.dll>
 #include <msclr\gcroot.h>
 #endif
 
-#include <string>
-
-/** A window containing a root view */
-class CSWindow {
+/** A view displaying a web page */
+class CSSuperView : public CSView {
 public:
-    CSWindow(CSRect rect,
-             std::string title,
-             bool closable,
-             bool resizable
-             );
+    CSSuperView() : CSSuperView(CSRect()) {}
+    CSSuperView(CSRect rect);
 
-    void presentView(CSView* view);
-
-    void relayout();
+    void addView(CSView* subView);
 
 #if defined(CS_Mac)
-    typedef NSWindow* NativeWindow;
+    typedef NSView* NativeView;
 #elif defined(CS_Win)
-    typedef msclr::gcroot<WinForm^> NativeWindow;
+    typedef msclr::gcroot<System::Windows::Forms::Panel^> NativeView;
 #endif
-
+    virtual CSView::NativeView toNativeView();
 private:
-    CSView* root;
-    NativeWindow nativeWindow;
+    NativeView nativeView;
 };
 
-#endif /* CSWindow_hpp */
+#endif /* CSSuperView_hpp */

@@ -21,27 +21,23 @@
 
 #include "CSWindow.hpp"
 
-CSWindow::CSWindow(CSView* view,
-                   CSRect rect,
+CSWindow::CSWindow(CSRect rect,
                    std::string title,
                    bool closable,
                    bool resizable
                    ) {
-    root = view;
 #if defined(CS_Mac)
-    nativeWindow = [[NSWindow alloc] initWithCSView: view
-                                               size: rect
-                                              title: title
-                                         isClosable: closable
-                                        isResizable: resizable
+    nativeWindow = [[NSWindow alloc] initWithsize: rect
+                                            title: title
+                                       isClosable: closable
+                                      isResizable: resizable
                    ];
 #elif defined(CS_Win)
-    nativeWindow = gcnew WinForm(view,
-                           rect,
-                           title,
-                           closable,
-                           resizable
-                           );
+    nativeWindow = gcnew WinForm(rect,
+                                 title,
+                                 closable,
+                                 resizable
+                                 );
 #endif
 }
 
@@ -51,5 +47,15 @@ void CSWindow::presentView(CSView* view) {
     [nativeWindow presentView: root];
 #elif defined(CS_Win)
     nativeWindow->presentView(root);
+#endif
+    relayout();
+}
+
+void CSWindow::relayout() {
+#if defined(CS_Mac)
+    root->setRect(CSRect([nativeWindow frame]));
+#elif defined(CS_Win)
+    root->setSize(CSSize(nativeWindow->ClientSize));
+    root->setOrigin(CSPoint(nativeWindow->Location));
 #endif
 }

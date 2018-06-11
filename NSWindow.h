@@ -16,11 +16,10 @@
 @interface NSWindow (CSView)
 
 /** Initialise an NSWindow with the given C++ style arguments */
-- (id) initWithCSView:(CSView*)view
-                 size:(CSRect)rect
-                title:(std::string)title
-           isClosable:(bool)closable
-          isResizable:(bool)resizable
+- (id) initWithsize:(CSRect)rect
+              title:(std::string)title
+         isClosable:(bool)closable
+        isResizable:(bool)resizable
 ;
 
 /** Present the given CSView */

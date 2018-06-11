@@ -34,8 +34,7 @@
 /** A C++ compatible subclass of a Windows Form object */
 ref class WinForm : public System::Windows::Forms::Form {
 public:
-    WinForm(CSView* view,
-            CSRect rect,
+    WinForm(CSRect rect,
             std::string title,
             bool closable,
             bool resizable
