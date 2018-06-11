@@ -25,7 +25,7 @@
 #include "CSCore.hpp"
 
 #if defined(CS_Mac)
-#import <Foundation.h>
+#import <Foundation/Foundation.h>
 #elif defined(CS_Win)
 #using <System.Drawing.dll>
 #include <msclr\gcroot.h>
@@ -120,12 +120,17 @@ struct CSRect {
     typedef CSRect NativeRect;
 #endif
 
+#if defined(CS_Mac)
+    CSRect(NativeRect rect) : origin(rect.origin), size(rect.size) {}
+#elif defined(CS_Win)
+#endif
+
     NativeRect toNativeRect() {
 #if defined(CS_Mac)
-        return NSMakeRect(this->origin->x,
-                          this->origin->y,
-                          this->size->width,
-                          this->size->height
+        return NSMakeRect(this->origin.x,
+                          this->origin.y,
+                          this->size.width,
+                          this->size.height
                           );
 #elif defined(CS_Win)
         return *this;

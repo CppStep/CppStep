@@ -53,7 +53,7 @@ void CSWindow::presentView(CSView* view) {
 
 void CSWindow::relayout() {
 #if defined(CS_Mac)
-    root->setRect(CSRect([nativeWindow frame]));
+    root->setRect(CSRect([[nativeWindow contentView] frame]));
 #elif defined(CS_Win)
     root->setSize(CSSize(nativeWindow->ClientSize));
     root->setOrigin(CSPoint(nativeWindow->Location));

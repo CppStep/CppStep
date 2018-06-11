@@ -41,7 +41,7 @@ void CSView::setRect(CSRect rect) {
 
 CSSize CSView::getSize() {
 #if defined(CS_Mac)
-    return CSSize([[toNativeView() frame] size]);
+    return CSSize([toNativeView() frame].size);
 #elif defined(CS_Win)
     return CSSize(toNativeView()->Size);
 #endif
@@ -58,7 +58,7 @@ void CSView::setSize(CSSize size) {
 
 CSPoint CSView::getOrigin() {
 #if defined(CS_Mac)
-    return CSPoint([toNativeView() frameOrigin]);
+    return CSPoint([toNativeView() frame].origin);
 #elif defined(CS_Win)
     return CSPoint(toNativeView()->Location);
 #endif
