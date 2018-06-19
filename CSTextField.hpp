@@ -29,6 +29,7 @@
 #if defined(CS_Mac)
 #import <AppKit/AppKit.h>
 #elif defined(CS_Win)
+#include "WinNativeEventHandler.hpp"
 #using <System.dll>
 #using <System.Windows.Forms.dll>
 #include <msclr\gcroot.h>
@@ -36,6 +37,32 @@
 #endif
 
 #include <string>
+#include <functional>
+
+#if defined(CS_Win)
+ref class WinTextFieldCallbackWrapper {
+private:
+    std::function<bool(std::string)>* callback;
+
+    void callCallback(System::Object^ sender) {
+        (*callback)(msclr::interop::marshal_as<std::string>(dynamic_cast<System::Windows::Forms::TextBox^>(sender)->Text));
+    }
+public:
+    WinTextFieldCallbackWrapper(std::function<bool(std::string)> callbackTMP) {
+        callback = new std::function<bool(std::string)>(callbackTMP);
+    }
+
+    void leave(System::Object^ sender, System::EventArgs^ e) {
+        callCallback(sender);
+    }
+
+    void enterKey(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
+        if (e->KeyCode == System::Windows::Forms::Keys::Enter) {
+            callCallback(sender);
+        }
+    }
+};
+#endif
 
 /** A view displaying a text field */
 class CSTextField : public CSView {
@@ -46,6 +73,8 @@ public:
     std::string getText();
     void setText(std::string text);
 
+    void setCallback(std::function<bool(std::string)> callback);
+
 #if defined(CS_Mac)
     typedef NSTextField* NativeView;
 #elif defined(CS_Win)
@@ -54,6 +83,9 @@ public:
     virtual CSView::NativeView toNativeView();
 private:
     NativeView nativeView;
+#if defined(CS_Win)
+    msclr::gcroot<WinTextFieldCallbackWrapper^> callbackWrapper;
+#endif
 };
 
 #endif /* CSTextField_hpp */

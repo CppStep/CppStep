@@ -48,6 +48,16 @@ void CSTextField::setText(std::string text) {
 #endif
 }
 
+void CSTextField::setCallback(std::function<bool(std::string)> callback) {
+#if defined(CS_Mac)
+    [nativeView setCallback: callback];
+#elif defined(CS_Win)
+    callbackWrapper = gcnew WinTextFieldCallbackWrapper(callback);
+    nativeView->Leave += gcnew System::EventHandler(callbackWrapper, &WinTextFieldCallbackWrapper::leave);
+    nativeView->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(callbackWrapper, &WinTextFieldCallbackWrapper::enterKey);
+#endif
+}
+
 CSView::NativeView CSTextField::toNativeView() {
   #if defined(CS_Mac)
   return this->nativeView;

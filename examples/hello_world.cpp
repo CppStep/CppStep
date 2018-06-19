@@ -30,6 +30,7 @@ int main() {
 
     CSTextField* text = new CSTextField();
     text->setText("field");
+    text->setCallback([](std::string str){ std::cout << str << std::endl; return true; });
 
     CSTableViewDataSource* dataSource = new DataSource();
     CSTableView* table = new CSTableView();
@@ -47,6 +48,6 @@ int main() {
                                     true
                                     );
     label->setWidth(50);
-    window->presentView(table);
+    window->presentView(text);
     CSApp::Run();
 }
