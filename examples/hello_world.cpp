@@ -41,13 +41,13 @@ int main() {
     align->addView(label, false);
     align->addView(text, true);
 
-    CSRect size = CSRect(0, 0, 500, 100);
+    CSRect size = CSRect(0, 0, 500, 500);
     CSWindow* window = new CSWindow(size,
                                     "Window",
                                     true,
                                     true
                                     );
     label->setWidth(50);
-    window->presentView(text);
+    window->presentView(table);
     CSApp::Run();
 }
