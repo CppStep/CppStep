@@ -111,10 +111,15 @@ public:
         return gcnew System::String(dataSource->getStringValueInCell(msclr::interop::marshal_as<std::string>(%*col), safe_cast<WinTableRowString^>(component)->getRow()).c_str());
     }
     virtual void SetValue(System::Object^ component, System::Object^ value) override {
-       dataSource->setStringValueInCell(msclr::interop::marshal_as<std::string>(%*col),
-                                        safe_cast<WinTableRowString^>(component)->getRow(),
-                                        msclr::interop::marshal_as<std::string>(safe_cast<System::String^>(value)));
-       //OnValueChanged(component, EventArgs::Empty);
+        if (value != nullptr) {
+            dataSource->setStringValueInCell(msclr::interop::marshal_as<std::string>(%*col),
+                                             safe_cast<WinTableRowString^>(component)->getRow(),
+                                             msclr::interop::marshal_as<std::string>(safe_cast<System::String^>(value)));
+        } else {
+            dataSource->setStringValueInCell(msclr::interop::marshal_as<std::string>(%*col),
+                                             safe_cast<WinTableRowString^>(component)->getRow(),
+                                             "");
+        }
     }
 private:
     CSTableViewDataSource* dataSource;
