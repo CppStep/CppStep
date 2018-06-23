@@ -39,7 +39,7 @@ public:
     /** Get whether the given column is read only
       * @param col The name of the column
       */
-    virtual bool isReadOnly() { return true; }
+    virtual bool isReadOnly(std::string col) { return true; }
     /** Get the value in a given cell
       * @return The string value in the cell
       * @param col The name of the column

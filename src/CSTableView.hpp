@@ -61,6 +61,11 @@ public:
       */
     void addColumn(std::string name);
 
+    /** Set the given column in the Data Source to be the header
+      * @param name The name of the column
+      */
+    void setHeaderColumn(std::string name);
+
 #if defined(CS_Mac)
     typedef NSTableView* NativeView;
 #elif defined(CS_Win)
