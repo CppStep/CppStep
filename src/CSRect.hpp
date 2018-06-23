@@ -67,8 +67,8 @@ struct CSPoint {
                            this->y
                            );
 #elif defined(CS_Win)
-return System::Drawing::Point(this->x,
-                              this->y
+return System::Drawing::Point((int)this->x,
+                              (int)this->y
                               );
 #endif
     }
@@ -111,8 +111,8 @@ struct CSSize {
                           this->height
                           );
 #elif defined(CS_Win)
-        return System::Drawing::Size(this->width,
-                                     this->height
+        return System::Drawing::Size((int)this->width,
+                                     (int)this->height
                                      );
 #endif
     }
