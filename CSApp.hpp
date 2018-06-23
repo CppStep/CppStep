@@ -24,32 +24,11 @@
 
 #include "CSCore.hpp"
 
-#if defined(CS_Mac)
-#import <AppKit/AppKit.h>
-#include <CoreServices/CoreServices.h>
-#elif defined(CS_Win)
-#include <msclr\gcroot.h>
-#endif
-
 namespace CSApp {
-    void Init() {
-#if defined(CS_Mac)
-        ProcessSerialNumber psn = { 0, kCurrentProcess };
-        TransformProcessType( &psn, kProcessTransformToForegroundApplication );
-#elif defined(CS_Win)
-#endif
-}
+    void Init();
 
     /** Enter the main runloop */
-    void Run() {
-#if defined(CS_Mac)
-        [[NSApplication sharedApplication] run];
-        [[NSApplication sharedApplication] setActivationPolicy:NSApplicationActivationPolicyRegular];//Accessory];
-        [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
-#elif defined(CS_Win)
-        System::Windows::Forms::Application::Run();
-#endif
-    }
+    void Run();
 }
 
 #endif /* CSApp_hpp */

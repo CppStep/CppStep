@@ -70,7 +70,7 @@ inline Arg getNativePropertyOnObject(System::Object^ obj, System::String^ proper
     if (obj != nullptr) {
         System::Reflection::PropertyInfo^ property = obj->GetType()->GetProperty(propertyName);
         if (property != nullptr) {
-            System::Object^ argMan = property->GetValue(obj);
+            System::Object^ argMan = property->GetValue(obj, nullptr);
             System::IntPtr argPtr;
 #define Marshal System::Runtime::InteropServices::Marshal
             System::IntPtr argPtr = Marshal::AllocHGlobal(Marshal::SizeOf(argMan));
@@ -98,7 +98,7 @@ inline std::string getNativePropertyOnObject<std::string>(System::Object^ obj, S
     if (obj != nullptr) {
         System::Reflection::PropertyInfo^ property = obj->GetType()->GetProperty(propertyName);
         if (property != nullptr) {
-            System::Object^ argMan = property->GetValue(obj);
+            System::Object^ argMan = property->GetValue(obj, nullptr);
             System::IntPtr argPtr;
 #define Marshal System::Runtime::InteropServices::Marshal
             if (argMan->GetType() == System::String::typeid) {

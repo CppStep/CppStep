@@ -41,8 +41,6 @@ WinForm::WinForm(CSRect rect,
     } else {
         this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
     }
-
-    this->Show();
 }
 
 void WinForm::presentView(CSView* view) {

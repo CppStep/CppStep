@@ -38,6 +38,21 @@
 #include <functional>
 #include <string>
 
+#if defined(CS_Win)
+ref class WinWindowClosingCallbackWrapper {
+private:
+    std::function<bool()>* callback;
+public:
+    WinWindowClosingCallbackWrapper(std::function<bool()> callbackTMP) {
+        callback = new std::function<bool()>(callbackTMP);
+    }
+
+    void WindowClosing(Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
+        e->Cancel = !(*callback)();
+    }
+};
+#endif
+
 /** A window containing a root view */
 class CSWindow {
 public:
@@ -47,7 +62,12 @@ public:
              bool resizable
              );
 
+    void show();
+    void hide();
+
     void presentView(CSView* view);
+
+    void setClosingCallback(std::function<bool()> callback);
 
     void relayout();
 
@@ -60,6 +80,9 @@ public:
 private:
     CSView* root;
     NativeWindow nativeWindow;
+#if defined(CS_Win)
+    msclr::gcroot<WinWindowClosingCallbackWrapper^> closingCallbackWrapper;
+#endif
 };
 
 #endif /* CSWindow_hpp */

@@ -44,6 +44,22 @@ CSWindow::CSWindow(CSRect rect,
 #endif
 }
 
+void CSWindow::show() {
+#if defined(CS_Mac)
+    [nativeWindow setHidden:NO];
+#elif defined(CS_Win)
+    nativeWindow->Show();
+#endif
+}
+
+void CSWindow::hide() {
+#if defined(CS_Mac)
+    [nativeWindow setHidden:YES];
+#elif defined(CS_Win)
+    nativeWindow->Hide();
+#endif
+}
+
 void CSWindow::presentView(CSView* view) {
     root = view;
 #if defined(CS_Mac)
@@ -52,6 +68,11 @@ void CSWindow::presentView(CSView* view) {
     nativeWindow->presentView(root);
 #endif
     relayout();
+}
+
+void CSWindow::setClosingCallback(std::function<bool()> callback) {
+    closingCallbackWrapper = gcnew WinWindowClosingCallbackWrapper(callback);
+    nativeWindow->Closing += gcnew System::ComponentModel::CancelEventHandler(closingCallbackWrapper, &WinWindowClosingCallbackWrapper::WindowClosing);
 }
 
 void CSWindow::relayout() {

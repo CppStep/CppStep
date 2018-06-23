@@ -85,7 +85,7 @@ public:
                                                                                           col(col) {}
     property bool IsReadOnly {
         virtual bool get() override {
-            return dataSource->isReadOnly();
+            return dataSource->isReadOnly(msclr::interop::marshal_as<std::string>(%*col));
         }
     }
     virtual void ResetValue(System::Object^ component) override {

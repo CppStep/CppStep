@@ -33,15 +33,6 @@ CSTableView::CSTableView(CSRect rect) {
 #endif
 }
 
-ref class Row : public System::Object {
-public:
-    property System::String^ Column {
-        System::String^ get() {
-            return "Hello World";
-        }
-    }
-};
-
 void CSTableView::setDataSource(CSTableViewDataSource* dataSourceTMP) {
     dataSource = dataSourceTMP;
 #if defined(CS_Mac)
@@ -52,15 +43,26 @@ void CSTableView::setDataSource(CSTableViewDataSource* dataSourceTMP) {
 }
 
 void CSTableView::addColumn(std::string name) {
-    columns.push_back(CSTableColumn(columns.size(), name));
 #if defined(CS_Mac)
-    [nativeView addColumn: [[NSTableColumn alloc] initWithName: @(name)]];
+    [nativeView addColumn : [[NSTableColumn alloc] initWithName:@(name)]];
 #elif defined(CS_Win)
     System::Windows::Forms::DataGridViewTextBoxColumn^ column = gcnew System::Windows::Forms::DataGridViewTextBoxColumn();
     column->Name = gcnew System::String(name.c_str());
     column->DataPropertyName = gcnew System::String(name.c_str());
-    column->ReadOnly = dataSource->isReadOnly();
+    column->ReadOnly = dataSource->isReadOnly(name);
     nativeView->Columns->Add(column);
+#endif
+}
+
+void CSTableView::setHeaderColumn(std::string name) {
+#if defined(CS_Mac)
+    [nativeView addColumn : [[NSTableColumn alloc] initWithName:@(name)]];
+#elif defined(CS_Win)
+    nativeView->Refresh();
+    for each (System::Windows::Forms::DataGridViewRow^ row in nativeView->Rows) {
+        row->HeaderCell->Value = gcnew System::String(dataSource->getStringValueInCell(name, row->Index).c_str());
+    }
+    nativeView->AutoResizeRowHeadersWidth(System::Windows::Forms::DataGridViewRowHeadersWidthSizeMode::AutoSizeToAllHeaders);
 #endif
 }
 

@@ -31,7 +31,7 @@ public:
     virtual int numberOfRows() = 0;
     virtual int numberOfColumns() = 0;
     virtual std::string getColumnName(int index) = 0;
-    virtual bool isReadOnly() { return true; }
+    virtual bool isReadOnly(std::string col) { return true; }
     virtual std::string getStringValueInCell(std::string col, int row) = 0;
     virtual void setStringValueInCell(std::string col, int row, std::string value) {}
 };
