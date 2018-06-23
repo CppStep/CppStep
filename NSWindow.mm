@@ -8,12 +8,17 @@
 
 #import "NSWindow.h"
 
-@implementation CSTextFieldCallbacks {
-    std::function<void> function;
+@implementation CSWindowCallbacks {
+    std::function<void()> function;
 }
 
-- (id) initWithFunction:(std::function<bool(std::string)>)functionTMP {
-    function = functionTMP;
+- (id) initWithFunction:(std::function<void()>)functionTMP {
+    if ( self = [super init] ) {
+        function = functionTMP;
+        return self;
+    } else {
+        return nil;
+    }
 }
 
 - (void)windowDidResize:(NSNotification *)notification {
@@ -51,7 +56,7 @@
 }
 
 - (void) setCallback:(std::function<void()>)callback {
-    [self setDelegate: [[CSWindowCallback alloc] initWithFunction: callback]];
+    [self setDelegate: [[CSWindowCallbacks alloc] initWithFunction: callback]];
 }
 
 @end

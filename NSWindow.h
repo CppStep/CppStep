@@ -14,7 +14,7 @@
 #include <functional>
 #include <string>
 
-@interface CSWindowCallbacks (NSObject, NSWindowDelegate)
+@interface CSWindowCallbacks : NSObject <NSWindowDelegate>
 
 - (id) initWithFunction:(std::function<void()>)function; /**< Create a callback object with the given function */
 

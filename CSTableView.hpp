@@ -27,6 +27,7 @@
 #include "CSRect.hpp"
 
 #if defined(CS_Mac)
+#include "CSNSTableViewDataSource.h"
 #import <AppKit/AppKit.h>
 #elif defined(CS_Win)
 #include "WinTableViewDataSource.hpp"
@@ -38,17 +39,6 @@
 
 #include <string>
 #include <iostream>
-
-struct CSTableColumn {
-    int index;
-    std::string identifier;
-
-    CSTableColumn(int index, std::string identifier) : index(index), identifier(identifier) {}
-    #if defined(CS_Mac)
-        CSTableColumn(NSTableColumn nativeColumn) : index([nativeColumn index]), identifier([nativeColumn identifier]) {}
-    #elif defined(CS_Win)
-    #endif
-};
 
 #include "CSTableViewDataSource.hpp"
 
@@ -72,8 +62,6 @@ private:
     NativeView nativeView;
 
     CSTableViewDataSource* dataSource;
-
-    std::vector<CSTableColumn> columns;
 };
 
 #endif /* CSTableView_hpp */

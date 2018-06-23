@@ -19,30 +19,32 @@
 //You should have received a copy of the GNU General Public License
 //along with CppStep.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef CSNSTableViewDataSource_mm
-#define CSNSTableViewDataSource_mm
+#import "CSNSTableViewDataSource.h"
 
-
-@interface ConfigMacTableView : NSTableView <NSTableViewDataSource> {
+@implementation CSNSTableViewDataSource {
     CSTableViewDataSource* dataSource;
 }
 
 - (id) initWithDataSource:(CSTableViewDataSource*)dataSourceTMP {
-    dataSource = dataSourceTMP
+    if ( self = [super init] ) {
+        dataSource = dataSourceTMP;
+        return self;
+    } else {
+        return nil;
+    }
 }
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView*)tableView {
-    return @(dataSource->numberOfRows());
+    return (NSInteger)(dataSource->numberOfRows());
 }
 
 - (id) tableView:(NSTableView*)tableView objectValueForTableColumn:(NSTableColumn*)tableColumn row:(NSInteger)row {
-    return @(dataSource->getStringValueInCell(CSTableColumn(tableColumn), (int)row).c_str());
+    return @(dataSource->getStringValueInCell(std::string([[tableColumn identifier] UTF8String]), (int)row).c_str());
 }
 
 - (void) tableView:(NSTableView*)tableView setObjectValue:(id)object forTableColumn:(NSTableColumn*)tableColumn row:(NSInteger)row {
-    dataSource->setStringValueInCell(CSTableColumn(tableColumn), (int)row, std::string([object UTF8String]));
+    dataSource->setStringValueInCell(std::string([[tableColumn identifier] UTF8String]), (int)row, std::string([object UTF8String]));
 }
 
 @end
 
-#endif /* CSNSTableViewDataSource_mm */

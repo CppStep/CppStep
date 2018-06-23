@@ -33,15 +33,6 @@ CSTableView::CSTableView(CSRect rect) {
 #endif
 }
 
-ref class Row : public System::Object {
-public:
-    property System::String^ Column {
-        System::String^ get() {
-            return "Hello World";
-        }
-    }
-};
-
 void CSTableView::setDataSource(CSTableViewDataSource* dataSourceTMP) {
     dataSource = dataSourceTMP;
 #if defined(CS_Mac)
@@ -52,9 +43,8 @@ void CSTableView::setDataSource(CSTableViewDataSource* dataSourceTMP) {
 }
 
 void CSTableView::addColumn(std::string name) {
-    columns.push_back(CSTableColumn(columns.size(), name));
 #if defined(CS_Mac)
-    [nativeView addColumn: [[NSTableColumn alloc] initWithName: @(name)]];
+    [nativeView addTableColumn: [[NSTableColumn alloc] initWithIdentifier: @(name.c_str())]];
 #elif defined(CS_Win)
     System::Windows::Forms::DataGridViewTextBoxColumn^ column = gcnew System::Windows::Forms::DataGridViewTextBoxColumn();
     column->Name = gcnew System::String(name.c_str());

@@ -23,9 +23,10 @@
 #define CSNSTableViewDataSource_h
 
 #include "CSTableViewDataSource.hpp"
+#import <AppKit/AppKit.h>
 
 /** An NSTableViewDataSource wrapper for a CSTableViewDataSource */
-@interface ConfigMacTableView : NSTableView <NSTableViewDataSource>
+@interface CSNSTableViewDataSource : NSObject <NSTableViewDataSource>
 
 - (id)initWithDataSource:(CSTableViewDataSource*)dataSourceTMP; /**< Initialise a list of commands with the given instance of the plugin */
 
