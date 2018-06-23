@@ -1,1 +1,1 @@
-clang++ -std=c++11 -fobjc-arc -fmodules -ObjC++ -framework AppKit -o hello_world hello_world.cpp ../CSView.cpp ../CSLabel.cpp ../CSTextField.cpp ../CSTableView.cpp ../CSSuperView.cpp ../CSAlignView.cpp ../CSWindow.cpp ../NSWindow.mm
+clang++ -std=c++11 -fobjc-arc -fmodules -ObjC++ -framework AppKit -o hello_world hello_world.cpp ../src/CSView.cpp ../src/CSLabel.cpp ../src/CSTextField.cpp ../src/CSTableView.cpp ../src/CSSuperView.cpp ../src/CSAlignView.cpp ../src/CSWindow.cpp ../src/NSWindow.mm

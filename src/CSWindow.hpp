@@ -56,19 +56,40 @@ public:
 /** A window containing a root view */
 class CSWindow {
 public:
+    /** Create a CSWindow
+      * @param rect      The frame for the window
+      * @param title     The title for the window
+      * @param closable  Whether the window has a close button
+      * @param resizable Whether the window can be manually resized
+      */
     CSWindow(CSRect rect,
              std::string title,
              bool closable,
              bool resizable
              );
 
+    /** Show the window */
     void show();
+    /** Hide the window.
+      * This does not delete the window so the window can be restored.
+      */
     void hide();
 
+    /** Change the main view
+      * @param view The view to show
+      */
     void presentView(CSView* view);
 
+    /** Set a callback to be called when the window is about to close
+      * @param callback The callback that is called when the window is about to close.
+      *                 It should return true if the window should be allowed to close.
+      *                 If this returns true the window will not be able to be opened again.
+      */
     void setClosingCallback(std::function<bool()> callback);
 
+    /** Relayout the view.
+      * This is called when the window is resized.
+      */
     void relayout();
 
 #if defined(CS_Mac)

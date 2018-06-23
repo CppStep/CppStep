@@ -51,7 +51,31 @@ public:
       * @param row   The index of the row
       * @param value The new value to put in the cell
       */
-    virtual void setStringValueInCell(std::string col, int row, std::string value) {}
+    virtual void setStringValueInCell(std::string col, int row, std::string value) {
+        throw "Not Implemented";
+    }
+    /** Get whether a value can be dragged from a given row
+      * @param row The index of the row
+      */
+    virtual bool canDragFromRow(int row) { return false; }
+    /** Get whether a value can be dropped into a given row
+      * @param row The index of the row
+      */
+    virtual bool canDropIntoRow(int row) { return false; }
+    /** Get the value to be dragged from a given row
+      * @return    The string value to be dragged
+      * @param row The index of the row
+      */
+    virtual std::string dragStringValueFromRow(int row) {
+        throw "Not Implemented";
+    }
+    /** Set the value to be dropped into a given row
+      * @param row   The index of the row
+      * @parma value The string value to be droppped
+      */
+    virtual void dropStringValueInRow(int row, std::string value) {
+        throw "Not Implemented";
+    }
 };
 
 #endif /* CSTableViewDataSource_hpp */

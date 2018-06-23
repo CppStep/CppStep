@@ -30,6 +30,7 @@
 #import <AppKit/AppKit.h>
 #elif defined(CS_Win)
 #include "WinTableViewDataSource.hpp"
+#include "WinTableView.hpp"
 #using <System.dll>
 #using <System.Windows.Forms.dll>
 #include <msclr\gcroot.h>
@@ -69,7 +70,7 @@ public:
 #if defined(CS_Mac)
     typedef NSTableView* NativeView;
 #elif defined(CS_Win)
-    typedef msclr::gcroot<System::Windows::Forms::DataGridView^> NativeView;
+    typedef msclr::gcroot<WinTableView^> NativeView;
 #endif
     virtual CSView::NativeView toNativeView();
 private:

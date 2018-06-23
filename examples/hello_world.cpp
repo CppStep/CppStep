@@ -1,10 +1,10 @@
-#include "../CSLabel.hpp"
-#include "../CSTextField.hpp"
-#include "../CSTableView.hpp"
-#include "../CSAlignView.hpp"
-#include "../CSRect.hpp"
-#include "../CSWindow.hpp"
-#include "../CSApp.hpp"
+#include "../src/CSLabel.hpp"
+#include "../src/CSTextField.hpp"
+#include "../src/CSTableView.hpp"
+#include "../src/CSAlignView.hpp"
+#include "../src/CSRect.hpp"
+#include "../src/CSWindow.hpp"
+#include "../src/CSApp.hpp"
 
 #include <iostream>
 
@@ -21,8 +21,15 @@ public:
     virtual bool isReadOnly() { return false; }
     virtual std::string getStringValueInCell(std::string col, int row) { return std::to_string(row); }
     virtual void setStringValueInCell(std::string col, int row, std::string value) { std::cerr << "(" << col << "," << row << ")" << value << std::endl; }
+    virtual bool canDragFromRow(int row) { return true; }
+    virtual bool canDropIntoRow(int row) { return true; }
+    virtual std::string dragStringValueFromRow(int row) { return "Dragged"; }
+    virtual void dropStringValueInRow(int row, std::string value) { std::cerr << value << std::endl; }
 };
 
+#if defined(CS_Win)
+[System::STAThread]
+#endif
 int main() {
     CSApp::Init();
 
@@ -49,5 +56,6 @@ int main() {
                                     );
     label->setWidth(50);
     window->presentView(table);
+    window->show();
     CSApp::Run();
 }

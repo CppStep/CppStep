@@ -22,7 +22,7 @@
 #include "WinTableViewDataSource.hpp"
 #include <iostream>
 
-System::ComponentModel::PropertyDescriptorCollection^ WinTableRowString/*TypeDescriptor*/::GetProperties(array<System::Attribute^>^ attributes) {
+System::ComponentModel::PropertyDescriptorCollection^ WinTableRowString::GetProperties(array<System::Attribute^>^ attributes) {
     System::ComponentModel::PropertyDescriptorCollection^ nonDynamicProperties;
     if (attributes == nullptr) {
         nonDynamicProperties = System::ComponentModel::TypeDescriptor::GetProperties(this, true);

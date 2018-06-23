@@ -25,11 +25,7 @@ CSTableView::CSTableView(CSRect rect) {
 #if defined(CS_Mac)
     nativeView = [[NSTableView alloc] initWithFrame:rect.toNativeRect()];
 #elif defined(CS_Win)
-    nativeView = gcnew System::Windows::Forms::DataGridView();
-    nativeView->AutoGenerateColumns = false;
-    nativeView->AutoSizeColumnsMode = System::Windows::Forms::DataGridViewAutoSizeColumnsMode::Fill;
-    nativeView->Location = rect.origin.toNativePoint();
-    nativeView->Size = rect.size.toNativeSize();
+    nativeView = gcnew WinTableView(rect);
 #endif
 }
 
@@ -38,7 +34,7 @@ void CSTableView::setDataSource(CSTableViewDataSource* dataSourceTMP) {
 #if defined(CS_Mac)
     [nativeView setDataSource: [[CSNSTableViewDataSource alloc] initWithDataSource: dataSource]];
 #elif defined(CS_Win)
-    nativeView->DataSource = gcnew WinTableViewDataSource(dataSource);
+    nativeView->setDataSource(dataSource);
 #endif
 }
 
@@ -46,11 +42,7 @@ void CSTableView::addColumn(std::string name) {
 #if defined(CS_Mac)
     [nativeView addColumn : [[NSTableColumn alloc] initWithName:@(name)]];
 #elif defined(CS_Win)
-    System::Windows::Forms::DataGridViewTextBoxColumn^ column = gcnew System::Windows::Forms::DataGridViewTextBoxColumn();
-    column->Name = gcnew System::String(name.c_str());
-    column->DataPropertyName = gcnew System::String(name.c_str());
-    column->ReadOnly = dataSource->isReadOnly(name);
-    nativeView->Columns->Add(column);
+    nativeView->addColumn(name);
 #endif
 }
 
@@ -58,11 +50,7 @@ void CSTableView::setHeaderColumn(std::string name) {
 #if defined(CS_Mac)
     [nativeView addColumn : [[NSTableColumn alloc] initWithName:@(name)]];
 #elif defined(CS_Win)
-    nativeView->Refresh();
-    for each (System::Windows::Forms::DataGridViewRow^ row in nativeView->Rows) {
-        row->HeaderCell->Value = gcnew System::String(dataSource->getStringValueInCell(name, row->Index).c_str());
-    }
-    nativeView->AutoResizeRowHeadersWidth(System::Windows::Forms::DataGridViewRowHeadersWidthSizeMode::AutoSizeToAllHeaders);
+    nativeView->setHeaderColumn(name);
 #endif
 }
 

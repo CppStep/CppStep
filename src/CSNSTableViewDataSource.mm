@@ -35,12 +35,51 @@
     return @(dataSource->numberOfRows());
 }
 
-- (id) tableView:(NSTableView*)tableView objectValueForTableColumn:(NSTableColumn*)tableColumn row:(NSInteger)row {
+- (id) tableView:(NSTableView*)tableView
+       objectValueForTableColumn:(NSTableColumn*)tableColumn
+       row:(NSInteger)row {
     return @(dataSource->getStringValueInCell(CSTableColumn(tableColumn), (int)row).c_str());
 }
 
-- (void) tableView:(NSTableView*)tableView setObjectValue:(id)object forTableColumn:(NSTableColumn*)tableColumn row:(NSInteger)row {
+- (void) tableView:(NSTableView*)tableView
+         setObjectValue:(id)object
+         forTableColumn:(NSTableColumn*)tableColumn
+         row:(NSInteger)row {
     dataSource->setStringValueInCell(CSTableColumn(tableColumn), (int)row, std::string([object UTF8String]));
+}
+
+- (BOOL) tableView:(NSTableView*)tableView
+         writeRowsWithIndexes:(NSIndexSet*)rowIndexes
+         toPasteboard:(NSPasteboard*)pboard {
+    if (dataSource->canDragFromRow(rowIndexes[0])) {
+        [pboard declareTypes:[NSArray<NSString*>
+                arrayWithObject:NSStringPboardType]
+                owner:self];
+        [pboard setString:dataSource->dragStringValueFromRow(rowIndexes[0])
+                forType:NSStringPboardType];
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+- (NSDragOperation) tableView:(NSTableView*)tableView
+                    validateDrop:(id<NSDraggingInfo>)info
+                    proposedRow:(NSInteger)row
+                    proposedDropOperation:(NSTableViewDropOperation)dropOperation {
+    if (dataSource->canDropIntoRow(row)) {
+        return NSDragOperationCopy;
+    } else {
+        return NSDragOperationNone;
+    }
+}
+
+- (BOOL) tableView:(NSTableView*)tableView
+         acceptDrop:(id<NSDraggingInfo>)info
+         row:(NSInteger)row
+         dropOperation:(NSTableViewDropOperation)dropOperation {
+    dataSource->dropStringValueInRow(row, std::string([[[info draggingPasteboard] stringForType:NSStringPboardType] UTF8String]))
+    return YES;
 }
 
 @end
