@@ -56,7 +56,7 @@ public:
 #if defined(CS_Mac)
     typedef MSMenuItem* nativeMenuItem;
 #elif defined(CS_Win)
-    typedef msclr::gcroot<System::Windows::Forms::ToolStripItem^> NativeMenuItem;
+    typedef msclr::gcroot<System::Windows::Forms::ToolStripMenuItem^> NativeMenuItem;
 #endif
     virtual NativeMenuItem toNativeMenuItem();
 private:

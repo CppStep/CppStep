@@ -32,10 +32,6 @@ public:
 [System::STAThread]
 #endif
 int main() {
-    std::cerr << CSClipboard::getStringValue() << std::endl;
-    CSClipboard::clear();
-    CSClipboard::setStringValue("Clippy");
-
     CSApp::Init();
 
     CSLabel* label = new CSLabel("label");
@@ -55,10 +51,10 @@ int main() {
 
     CSMenuBar* menuBar = new CSMenuBar();
     CSSubMenu* subMenu = new CSSubMenu("SubMenu");
-    subMenu->addItem(new CSMenuItem("Item", [](){ std::cerr << "Click Item" << std::endl; }));
+    subMenu->addItem(new CSMenuItem("Item", [](){ std::cerr << "Click Item" << std::endl; }, CSKeyCode("Q", true, true, false)));
     CSSubMenu* subSubMenu = new CSSubMenu("SubSubMenu");
-    subSubMenu->addItems(new CSMenuItem("Item1", [](){ std::cerr << "Click Item1" << std::endl; }),
-                         new CSMenuItem("Item2", [](){ std::cerr << "Click Item2" << std::endl; }));
+    subSubMenu->addItems(new CSMenuItem("Item1", [](){ std::cerr << "Click Item1" << std::endl; }, CSKeyCode("W", true, false, true)),
+                         new CSMenuItem("Item2", [](){ std::cerr << "Click Item2" << std::endl; }, CSKeyCode("E", true, false, false)));
     subMenu->addSubMenu(subSubMenu, [](){ std::cerr << "Click SubSubMenu" << std::endl; });
     menuBar->addSubMenu(subMenu, [](){ std::cerr << "Click SubMenu" << std::endl; });
 
