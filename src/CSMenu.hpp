@@ -97,7 +97,7 @@ public:
     {
         if constexpr (isTopLevel) {
             if constexpr (isContextMenu) {
-                nativeView = gcnew System::Windows::Forms::ContextMenuStrip();
+                nativeMenu = gcnew System::Windows::Forms::ContextMenuStrip();
             } else {
                 nativeMenu = gcnew System::Windows::Forms::MenuStrip();
             }
