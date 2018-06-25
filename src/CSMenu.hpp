@@ -38,14 +38,16 @@
 #include <string>
 #include <type_traits>
 
-template <bool> class CSMenu;
+template <bool, bool> class CSMenu;
 
 #if defined(CS_Mac)
-typedef CSMenu<> CSMenuBar;
-typedef CSMenu<> CSSubMenu;
+typedef CSMenu CSMenuBar;
+typedef CSMenu CSContextMenu;
+typedef CSMenu CSSubMenu;
 #elif defined(CS_Win)
-typedef CSMenu<true> CSMenuBar;
-typedef CSMenu<false> CSSubMenu;
+typedef CSMenu<true, false> CSMenuBar;
+typedef CSMenu<true, true> CSContextMenu;
+typedef CSMenu<false false> CSSubMenu;
 #endif
 
 class CSMenuItem {
@@ -69,7 +71,7 @@ private:
 
 /** A menu bar. */
 #if defined(CS_Win)
-template <bool isTopLevel = true>
+template <bool isTopLevel = true, bool isContextMenu = false>
 #endif
 class CSMenu {
 public:
@@ -77,7 +79,9 @@ public:
     typedef MSMenu* NativeMenu;
 #elif defined(CS_Win)
     typedef typename std::conditional<isTopLevel,
-                                      msclr::gcroot<System::Windows::Forms::MenuStrip^>,
+                                      typename std::conditional<isContextMenu,
+                                                                msclr::gcroot<System::Windows::Forms::ContextMenuStrip^>,
+                                                                msclr::gcroot<System::Windows::Forms::MenuStrip^>>::type,
                                       msclr::gcroot<System::Windows::Forms::ToolStripMenuItem^>>::type NativeMenu;
 #endif
     virtual NativeMenu toNativeMenu() {
@@ -92,7 +96,11 @@ public:
 #elif defined(CS_Win)
     {
         if constexpr (isTopLevel) {
-            nativeMenu = gcnew System::Windows::Forms::MenuStrip();
+            if constexpr (isContextMenu) {
+                nativeView = gcnew System::Windows::Forms::ContextMenuStrip();
+            } else {
+                nativeMenu = gcnew System::Windows::Forms::MenuStrip();
+            }
             nativeMenu->Name = gcnew System::String(name.c_str());
         } else {
             nativeMenu = gcnew System::Windows::Forms::ToolStripMenuItem(gcnew System::String(name.c_str()));
