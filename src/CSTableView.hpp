@@ -68,6 +68,11 @@ public:
       */
     void setHeaderColumn(std::string name);
 
+    /** Get the index of the currently selected row
+      * @return The index of the currently selected row or -1 if no rows are selected
+      */
+    int getSelectedRow();
+
 #if defined(CS_Mac)
     typedef NSTableView* NativeView;
 #elif defined(CS_Win)

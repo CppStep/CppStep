@@ -24,6 +24,7 @@
 CSTableView::CSTableView(CSRect rect) {
 #if defined(CS_Mac)
     nativeView = [[NSTableView alloc] initWithFrame:rect.toNativeRect()];
+    [nativeView setAllowsMultipleSelection:NO];
 #elif defined(CS_Win)
     nativeView = gcnew WinTableView(rect);
 #endif
@@ -51,6 +52,18 @@ void CSTableView::setHeaderColumn(std::string name) {
     [nativeView addTableColumn: [[NSTableColumn alloc] initWithIdentifier: @(name.c_str())]];
 #elif defined(CS_Win)
     nativeView->setHeaderColumn(name);
+#endif
+}
+
+int CSTableView::getSelectedRow() {
+#if defined(CS_Mac)
+    return (int)[nativeView selectedColumn];
+#elif defined(CS_Win)
+    if (nativeView->SelectedRows->Count > 0) {
+        return nativeView->SelectedRows[0]->Index;
+    } else {
+        return -1;
+    }
 #endif
 }
 
