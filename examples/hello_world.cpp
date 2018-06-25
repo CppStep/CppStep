@@ -51,6 +51,8 @@ int main() {
     CSMenuBar* menuBar = new CSMenuBar("");
     CSSubMenu* subMenu = new CSSubMenu("SubMenu");
     subMenu->addItem(new CSMenuItem(new CSMenu<false>("Item"), CSKeyCode(), [](){ std::cerr << "Click Item" << std::endl; }));
+    subMenu->addItems(new CSMenuItem(new CSMenu<false>("Item1"), CSKeyCode(), [](){ std::cerr << "Click Item1" << std::endl; }),
+                      new CSMenuItem(new CSMenu<false>("Item2"), CSKeyCode(), [](){ std::cerr << "Click Item2" << std::endl; }));
     menuBar->addItem(new CSMenuItem(subMenu, CSKeyCode(), [](){ std::cerr << "Click SubMenu" << std::endl; }));
 
     CSRect size = CSRect(0, 0, 500, 500);

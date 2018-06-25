@@ -85,6 +85,16 @@ public:
         }
 #endif
     }
+
+    void addItems(CSMenuItem* item) {
+        addItem(item);
+    }
+
+    template <typename...Items>
+    void addItems(CSMenuItem* item, Items...items) {
+        addItem(item);
+        addItems(items...);
+    }
 };
 
 #if defined(CS_Mac)
