@@ -73,6 +73,10 @@ public:
       */
     int getSelectedRow();
 
+    /** Reload the data from the data source
+      */
+    void reload();
+
 #if defined(CS_Mac)
     typedef NSTableView* NativeView;
 #elif defined(CS_Win)

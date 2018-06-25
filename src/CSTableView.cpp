@@ -67,6 +67,15 @@ int CSTableView::getSelectedRow() {
 #endif
 }
 
+void CSTableView::reload() {
+#if defined(CS_Mac)
+    [nativeView reloadData];
+#elif defined(CS_Win)
+    nativeView->Refresh();
+#endif
+
+}
+
 CSView::NativeView CSTableView::toNativeView() {
 #if defined(CS_Mac)
     return this->nativeView;
