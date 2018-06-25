@@ -48,7 +48,7 @@ int main() {
     align->addView(label, false);
     align->addView(text, true);
 
-    CSMenuBar* menuBar = new CSMenuBar("");
+    CSMenuBar* menuBar = new CSMenuBar();
     CSSubMenu* subMenu = new CSSubMenu("SubMenu");
     subMenu->addItem(new CSMenuItem(new CSMenu<false>("Item"), [](){ std::cerr << "Click Item" << std::endl; }));
     subMenu->addItems(new CSMenuItem(new CSMenu<false>("Item1"), [](){ std::cerr << "Click Item1" << std::endl; }),

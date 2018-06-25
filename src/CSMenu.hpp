@@ -85,7 +85,7 @@ public:
 private:
     NativeMenu nativeMenu;
 public:
-    CSMenu(std::string name)
+    CSMenu(std::string name = "")
 #if defined(CS_Mac)
         : nativeMenu([[NSMenu alloc] initWithTitle:@(name.c_str())]) {}
 #elif defined(CS_Win)
@@ -98,7 +98,6 @@ public:
         }
     }
 #endif
-
 
     void addItem(CSMenuItem* item) {
 #if defined(CS_Mac)
