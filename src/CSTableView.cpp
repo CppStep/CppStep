@@ -39,6 +39,14 @@ void CSTableView::setDataSource(CSTableViewDataSource* dataSourceTMP) {
 #endif
 }
 
+void CSTableView::setContextMenu(CSContextMenu* contextMenu) {
+#if defined(CS_Mac)
+    //[nativeView setDataSource: [[CSNSTableViewDataSource alloc] initWithDataSource: dataSource]];
+#elif defined(CS_Win)
+    nativeView->ContextMenuStrip = contextMenu->toNativeMenu();
+#endif
+}
+
 void CSTableView::addColumn(std::string name) {
 #if defined(CS_Mac)
     [nativeView addTableColumn: [[NSTableColumn alloc] initWithIdentifier: @(name.c_str())]];

@@ -25,6 +25,7 @@
 #include "CSCore.hpp"
 #include "CSView.hpp"
 #include "CSRect.hpp"
+#include "CSMenu.hpp"
 
 #if defined(CS_Mac)
 #include "CSNSTableViewDataSource.h"
@@ -57,6 +58,11 @@ public:
       * @param dataSource The Data Source
       */
     void setDataSource(CSTableViewDataSource* dataSourceTMP);
+
+    /** Set the context (right click) menu
+      * @param contextMenu The context menu
+      */
+    void setContextMenu(CSContextMenu* contextMenu);
 
     /** Add a column
       * @param name The name of the column
