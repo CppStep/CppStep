@@ -2,7 +2,7 @@
 //  CSUndoManager.cpp
 //  CppStep
 //
-//  Copyright © 2018 Jonathan Tanner. All rights reserved.
+//  Copyright ï¿½ 2018 Jonathan Tanner. All rights reserved.
 //
 //This file is part of CppStep.
 //
@@ -21,12 +21,12 @@
 
 #include "CSUndoManager.hpp"
 
-CSUndoManager::CSUndoManager() {
-    undoStack = nullptr;
-    redoStack = nullptr;
-    isUndoing = false;
-    isRedoing = false;
-}
+// CSUndoManager::CSUndoManager() {
+//     undoStack = nullptr;
+//     redoStack = nullptr;
+//     isUndoing = false;
+//     isRedoing = false;
+// }
 
 void CSUndoManager::registerUndoFunc(std::function<void()> f) {
     if (isUndoing) {
@@ -65,4 +65,3 @@ void CSUndoManager::redo() {
         redoStack = redoStack->next;
     }
 }
-
