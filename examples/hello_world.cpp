@@ -5,6 +5,7 @@
 #include "../src/CSRect.hpp"
 #include "../src/CSWindow.hpp"
 #include "../src/CSApp.hpp"
+#include "../src/CSClipboard.hpp"
 
 #include <iostream>
 
@@ -31,6 +32,10 @@ public:
 [System::STAThread]
 #endif
 int main() {
+    std::cerr << CSClipboard::getStringValue() << std::endl;
+    CSClipboard::clear();
+    CSClipboard::setStringValue("Clippy");
+
     CSApp::Init();
 
     CSLabel* label = new CSLabel("label");
