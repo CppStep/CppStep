@@ -34,34 +34,12 @@
 
 /** Accessor methods for the system clipboard */
 namespace CSClipboard {
-#if defined(CS_Mac)
-#elif defined(CS_Win)
-#endif
 
-void clear() {
-#if defined(CS_Mac)
-    [[NSPasteboard generalPasteboard] clearContents];
-#elif defined(CS_Win)
-    System::Windows::Forms::Clipboard::Clear();
-#endif
-}
+void clear();
 
-std::string getStringValue() {
-#if defined(CS_Mac)
-    return std::string([[[NSPasteboard generalPasteboard] stringForType:NSPasteboardTypeString] UTF8String]);
-#elif defined(CS_Win)
-    return msclr::interop::marshal_as<std::string>(System::Windows::Forms::Clipboard::GetText());
-#endif
-}
+std::string getStringValue();
 
-void setStringValue(std::string value) {
-#if defined(CS_Mac)
-    [[NSPasteboard generalPasteboard] declareTypes:[NSArray<NSString*> arrayWithObject:NSPasteboardTypeString] owner:nil];
-    [[NSPasteboard generalPasteboard] setString:@(value.c_str()) forType:NSPasteboardTypeString];
-#elif defined(CS_Win)
-    System::Windows::Forms::Clipboard::SetText(gcnew System::String(value.c_str()));
-#endif
-}
+void setStringValue(std::string value);
 
 };
 
