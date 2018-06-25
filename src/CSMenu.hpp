@@ -47,7 +47,7 @@ typedef CSMenu CSSubMenu;
 #elif defined(CS_Win)
 typedef CSMenu<true, false> CSMenuBar;
 typedef CSMenu<true, true> CSContextMenu;
-typedef CSMenu<false false> CSSubMenu;
+typedef CSMenu<false, false> CSSubMenu;
 #endif
 
 class CSMenuItem {
