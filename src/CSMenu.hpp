@@ -38,7 +38,33 @@
 #include <string>
 #include <type_traits>
 
-class CSMenuItem;
+template <bool> class CSMenu;
+
+#if defined(CS_Mac)
+typedef CSMenu<> CSMenuBar;
+typedef CSMenu<> CSSubMenu;
+#elif defined(CS_Win)
+typedef CSMenu<true> CSMenuBar;
+typedef CSMenu<false> CSSubMenu;
+#endif
+
+class CSMenuItem {
+public:
+    CSMenuItem(CSSubMenu* subMenu, std::function<void()> callback = [](){}, CSKeyCode keyCode = CSKeyCode());
+
+#if defined(CS_Mac)
+    typedef MSMenuItem* nativeMenuItem;
+#elif defined(CS_Win)
+    typedef msclr::gcroot<System::Windows::Forms::ToolStripItem^> NativeMenuItem;
+#endif
+    virtual NativeMenuItem toNativeMenuItem();
+private:
+    NativeMenuItem nativeMenuItem;
+
+#if defined(CS_Mac)
+    void CSMenuItem(std::string name, CSKeyCode keyCode);
+#endif
+};
 
 /** A menu bar. */
 #if defined(CS_Win)
@@ -90,37 +116,15 @@ public:
         addItem(item);
     }
 
+    void addSubMenu(CSSubMenu* subMenu, std::function<void()> callback = [](){}, CSKeyCode keyCode = CSKeyCode()) {
+        addItem(new CSMenuItem(subMenu, callback, keyCode));
+    }
+
     template <typename...Items>
     void addItems(CSMenuItem* item, Items...items) {
         addItem(item);
         addItems(items...);
     }
-};
-
-#if defined(CS_Mac)
-typedef CSMenu<> CSMenuBar;
-typedef CSMenu<> CSSubMenu;
-#elif defined(CS_Win)
-typedef CSMenu<true> CSMenuBar;
-typedef CSMenu<false> CSSubMenu;
-#endif
-
-class CSMenuItem {
-public:
-    CSMenuItem(CSSubMenu* subMenu, CSKeyCode keyCode, std::function<void()> callback = [](){});
-
-#if defined(CS_Mac)
-    typedef MSMenuItem* nativeMenuItem;
-#elif defined(CS_Win)
-    typedef msclr::gcroot<System::Windows::Forms::ToolStripItem^> NativeMenuItem;
-#endif
-    virtual NativeMenuItem toNativeMenuItem();
-private:
-    NativeMenuItem nativeMenuItem;
-
-#if defined(CS_Mac)
-    void CSMenuItem(std::string name, CSKeyCode keyCode);
-#endif
 };
 
 #endif /* CSMenu_hpp */
