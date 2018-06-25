@@ -41,7 +41,9 @@
 class CSMenuItem;
 
 /** A menu bar. */
+#if defined(CS_Win)
 template <bool isTopLevel = true>
+#endif
 class CSMenu {
 public:
 #if defined(CS_Mac)
@@ -85,12 +87,17 @@ public:
     }
 };
 
+#if defined(CS_Mac)
+typedef CSMenu<> CSMenuBar;
+typedef CSMenu<> CSSubMenu;
+#elif defined(CS_Win)
 typedef CSMenu<true> CSMenuBar;
 typedef CSMenu<false> CSSubMenu;
+#endif
 
 class CSMenuItem {
 public:
-    CSMenuItem(CSMenu<false>* subMenu, CSKeyCode keyCode, std::function<void()> callback = [](){});
+    CSMenuItem(CSSubMenu* subMenu, CSKeyCode keyCode, std::function<void()> callback = [](){});
 
 #if defined(CS_Mac)
     typedef MSMenuItem* nativeMenuItem;

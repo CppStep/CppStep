@@ -21,7 +21,7 @@
 
 #include "CSMenu.hpp"
 
-CSMenuItem::CSMenuItem(CSMenu<false>* subMenu, CSKeyCode keyCode, std::function<void()> callback) :
+CSMenuItem::CSMenuItem(CSSubMenu* subMenu, CSKeyCode keyCode, std::function<void()> callback) :
 #if defined(CS_Mac)
     CSMenuItem(subMenu->name, keyCode) {
     [nativeMenuItem setSubMenu:subMenu->toNativeMenu()];
