@@ -24,6 +24,7 @@
 
 #include "CSView.hpp"
 #include "CSRect.hpp"
+#include "CSMenu.hpp"
 
 #using <System.dll>
 #using <System.Drawing.dll>
@@ -39,7 +40,7 @@ public:
             bool resizable
             );
 
-    void presentView(CSView* view);
+    void presentView(CSView* view, CSMenuBar* menuBar);
 
 private:
 };

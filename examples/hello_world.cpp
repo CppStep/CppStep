@@ -48,6 +48,11 @@ int main() {
     align->addView(label, false);
     align->addView(text, true);
 
+    CSMenuBar* menuBar = new CSMenuBar("");
+    CSSubMenu* subMenu = new CSSubMenu("SubMenu");
+    subMenu->addItem(new CSMenuItem(new CSMenu<false>("Item"), CSKeyCode(), [](){ std::cerr << "Click Item" << std::endl; }));
+    menuBar->addItem(new CSMenuItem(subMenu, CSKeyCode(), [](){ std::cerr << "Click SubMenu" << std::endl; }));
+
     CSRect size = CSRect(0, 0, 500, 500);
     CSWindow* window = new CSWindow(size,
                                     "Window",
@@ -55,7 +60,7 @@ int main() {
                                     true
                                     );
     label->setWidth(50);
-    window->presentView(table);
+    window->presentView(table, menuBar);
     window->show();
     CSApp::Run();
 }

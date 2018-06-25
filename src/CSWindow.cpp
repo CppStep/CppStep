@@ -60,12 +60,12 @@ void CSWindow::hide() {
 #endif
 }
 
-void CSWindow::presentView(CSView* view) {
+void CSWindow::presentView(CSView* view, CSMenuBar* menuBar) {
     root = view;
 #if defined(CS_Mac)
-    [nativeWindow presentView: root];
+    [nativeWindow presentView: root menuBar:menuBar];
 #elif defined(CS_Win)
-    nativeWindow->presentView(root);
+    nativeWindow->presentView(root, menuBar);
 #endif
     relayout();
 }

@@ -25,6 +25,7 @@
 #include "CSCore.hpp"
 #include "CSView.hpp"
 #include "CSRect.hpp"
+#include "CSMenu.hpp"
 
 #if defined(CS_Mac)
 #include "NSWindow.h"
@@ -76,9 +77,10 @@ public:
     void hide();
 
     /** Change the main view
-      * @param view The view to show
+      * @param view    The view to show
+      * @param menuBar The menu bar to show
       */
-    void presentView(CSView* view);
+    void presentView(CSView* view, CSMenuBar* menuBar = nullptr);
 
     /** Set a callback to be called when the window is about to close
       * @param callback The callback that is called when the window is about to close.
