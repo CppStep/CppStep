@@ -43,10 +43,7 @@ WinForm::WinForm(CSRect rect,
     }
 }
 
-void WinForm::presentView(CSView* view, CSMenuBar* menuBar) {
+void WinForm::presentView(CSView* view) {
     this->Controls->Clear();
-    if (menuBar != nullptr) {
-        this->Controls->Add(menuBar->toNativeMenu());
-    }
     this->Controls->Add(view->toNativeView());
 }

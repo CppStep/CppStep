@@ -26,6 +26,8 @@
 #include "CSView.hpp"
 #include "CSRect.hpp"
 #include "CSMenu.hpp"
+#include "CSAlignView.hpp"
+#include "CSArbitraryView.hpp"
 
 #if defined(CS_Mac)
 #include "NSWindow.h"

@@ -61,11 +61,19 @@ void CSWindow::hide() {
 }
 
 void CSWindow::presentView(CSView* view, CSMenuBar* menuBar) {
-    root = view;
 #if defined(CS_Mac)
+    root = view;
     [nativeWindow presentView: root menuBar:menuBar];
 #elif defined(CS_Win)
-    nativeWindow->presentView(root, menuBar);
+    if (menuBar == nullptr) {
+        root = view;
+    } else {
+        CSAlignView* align = new CSAlignView(CSAlignView::Direction::Vertical);
+        align->addView(new CSArbitraryView(menuBar->toNativeMenu()), false);
+        align->addView(view, true);
+        root = align;
+    }
+    nativeWindow->presentView(root);
 #endif
     relayout();
 }

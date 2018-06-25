@@ -40,7 +40,7 @@ public:
             bool resizable
             );
 
-    void presentView(CSView* view, CSMenuBar* menuBar);
+    void presentView(CSView* view);
 
 private:
 };
