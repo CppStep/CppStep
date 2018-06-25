@@ -21,6 +21,15 @@
 
 #include "CSMenu.hpp"
 
+CSMenuItem::CSMenuItem(std::string title, std::function<void()> callback, CSKeyCode keyCode) :
+#if defined(CS_Mac)
+    CSMenuItem(title, keyCode) {}
+#elif defined(CS_Win)
+    nativeMenuItem(gcnew System::Windows::Forms::ToolStripButton(gcnew System::String(title.c_str()))) {
+    nativeMenuItem->Click += gcnew_WinNativeEventHandler<void>(callback);
+}
+#endif
+
 CSMenuItem::CSMenuItem(CSSubMenu* subMenu, std::function<void()> callback, CSKeyCode keyCode) :
 #if defined(CS_Mac)
     CSMenuItem(subMenu->name, keyCode) {
@@ -28,8 +37,8 @@ CSMenuItem::CSMenuItem(CSSubMenu* subMenu, std::function<void()> callback, CSKey
 }
 #elif defined(CS_Win)
     nativeMenuItem(subMenu->toNativeMenu()) {
-        nativeMenuItem->Click += gcnew_WinNativeEventHandler<void>(callback);
-    }
+    nativeMenuItem->Click += gcnew_WinNativeEventHandler<void>(callback);
+}
 #endif
 
 CSMenuItem::NativeMenuItem CSMenuItem::toNativeMenuItem() {

@@ -50,6 +50,7 @@ typedef CSMenu<false> CSSubMenu;
 
 class CSMenuItem {
 public:
+    CSMenuItem(std::string title, std::function<void()> callback = [](){}, CSKeyCode keyCode = CSKeyCode());
     CSMenuItem(CSSubMenu* subMenu, std::function<void()> callback = [](){}, CSKeyCode keyCode = CSKeyCode());
 
 #if defined(CS_Mac)
