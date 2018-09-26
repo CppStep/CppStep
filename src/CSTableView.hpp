@@ -25,6 +25,7 @@
 #include "CSCore.hpp"
 #include "CSView.hpp"
 #include "CSRect.hpp"
+#include "CSMenu.hpp"
 
 #if defined(CS_Mac)
 #include "CSNSTableViewDataSource.h"
@@ -58,6 +59,11 @@ public:
       */
     void setDataSource(CSTableViewDataSource* dataSourceTMP);
 
+    /** Set the context (right click) menu
+      * @param contextMenu The context menu
+      */
+    void setContextMenu(CSContextMenu* contextMenu);
+
     /** Add a column
       * @param name The name of the column
       */
@@ -67,6 +73,15 @@ public:
       * @param name The name of the column
       */
     void setHeaderColumn(std::string name);
+
+    /** Get the index of the currently selected row
+      * @return The index of the currently selected row or -1 if no rows are selected
+      */
+    int getSelectedRow();
+
+    /** Reload the data from the data source
+      */
+    void reload();
 
 #if defined(CS_Mac)
     typedef NSTableView* NativeView;

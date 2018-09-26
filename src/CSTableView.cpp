@@ -24,6 +24,7 @@
 CSTableView::CSTableView(CSRect rect) {
 #if defined(CS_Mac)
     nativeView = [[NSTableView alloc] initWithFrame:rect.toNativeRect()];
+    [nativeView setAllowsMultipleSelection:NO];
 #elif defined(CS_Win)
     nativeView = gcnew WinTableView(rect);
 #endif
@@ -35,6 +36,14 @@ void CSTableView::setDataSource(CSTableViewDataSource* dataSourceTMP) {
     [nativeView setDataSource: [[CSNSTableViewDataSource alloc] initWithDataSource: dataSource]];
 #elif defined(CS_Win)
     nativeView->setDataSource(dataSource);
+#endif
+}
+
+void CSTableView::setContextMenu(CSContextMenu* contextMenu) {
+#if defined(CS_Mac)
+    //[nativeView setDataSource: [[CSNSTableViewDataSource alloc] initWithDataSource: dataSource]];
+#elif defined(CS_Win)
+    nativeView->ContextMenuStrip = contextMenu->toNativeMenu();
 #endif
 }
 
@@ -52,6 +61,27 @@ void CSTableView::setHeaderColumn(std::string name) {
 #elif defined(CS_Win)
     nativeView->setHeaderColumn(name);
 #endif
+}
+
+int CSTableView::getSelectedRow() {
+#if defined(CS_Mac)
+    return (int)[nativeView selectedColumn];
+#elif defined(CS_Win)
+    if (nativeView->SelectedRows->Count > 0) {
+        return nativeView->SelectedRows[0]->Index;
+    } else {
+        return -1;
+    }
+#endif
+}
+
+void CSTableView::reload() {
+#if defined(CS_Mac)
+    [nativeView reloadData];
+#elif defined(CS_Win)
+    nativeView->Refresh();
+#endif
+
 }
 
 CSView::NativeView CSTableView::toNativeView() {

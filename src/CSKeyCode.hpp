@@ -24,19 +24,52 @@
 
 #include "CSCore.hpp"
 
-// #if defined(CS_Mac)
-// #import <Foundation/Foundation.h>
-// #elif defined(CS_Win)
-// #using <System.Drawing.dll>
-// #include <msclr\gcroot.h>
-// #endif
+#if defined(CS_Mac)
+#import <Foundation/Foundation.h>
+#elif defined(CS_Win)
+#using <System.Windows.Forms.dll>
+#include <msclr\gcroot.h>
+#endif
+
+#include <string>
 
 /** A key code */
 struct CSKeyCode {
+public:
 #if defined(CS_Mac)
-    NSString* toNativeKeyCode() {}
+    typedef NSString* NativeKeyCode;
 #elif defined(CS_Win)
+    typedef System::Windows::Forms::Keys NativeKeyCode;
 #endif
+private:
+    NativeKeyCode nativeKeyCode;
+public:
+    CSKeyCode() :
+#if defined(CS_Mac)
+        nativeKeyCode(@"") {}
+#elif defined(CS_Win)
+        nativeKeyCode(System::Windows::Forms::Keys::None) {}
+#endif
+
+    CSKeyCode(std::string keyString, bool cmd, bool mod, bool shift) :
+#if defined(CS_Mac)
+#elif defined(CS_Win)
+        nativeKeyCode((NativeKeyCode)System::Enum::Parse(NativeKeyCode::typeid, gcnew System::String(keyString.c_str()), true)) {
+        if (cmd) {
+            nativeKeyCode = nativeKeyCode | NativeKeyCode::Control;
+        }
+        if (mod) {
+            nativeKeyCode = nativeKeyCode | NativeKeyCode::Alt;
+        }
+        if (shift) {
+            nativeKeyCode = nativeKeyCode | NativeKeyCode::Shift;
+        }
+    }
+#endif
+
+    NativeKeyCode toNativeKeyCode() {
+        return nativeKeyCode;
+    }
 };
 
 #endif /* CSKeyCode_hpp */

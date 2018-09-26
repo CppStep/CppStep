@@ -5,6 +5,8 @@
 #include "../src/CSRect.hpp"
 #include "../src/CSWindow.hpp"
 #include "../src/CSApp.hpp"
+#include "../src/CSClipboard.hpp"
+#include "../src/CSUndoManager.hpp"
 
 #include <iostream>
 
@@ -33,6 +35,21 @@ public:
 int main() {
     CSApp::Init();
 
+    CSUndoManager* undoManager = new CSUndoManager();
+
+    CSMenuBar* menuBar = new CSMenuBar();
+    CSSubMenu* subMenu = new CSSubMenu("SubMenu");
+    subMenu->addItem(new CSMenuItem("Item", [](){ std::cerr << "Click Item" << std::endl; }, CSKeyCode("Q", true, true, false)));
+    CSSubMenu* subSubMenu = new CSSubMenu("SubSubMenu");
+    subSubMenu->addItems(new CSMenuItem("Item1", [](){ std::cerr << "Click Item1" << std::endl; }, CSKeyCode("W", true, false, true)),
+                         new CSMenuItem("Item2", [](){ std::cerr << "Click Item2" << std::endl; }, CSKeyCode("E", true, false, false)));
+    subMenu->addSubMenu(subSubMenu, [](){ std::cerr << "Click SubSubMenu" << std::endl; });
+    menuBar->addSubMenu(subMenu, [](){ std::cerr << "Click SubMenu" << std::endl; });
+
+    CSContextMenu* contextMenu = new CSContextMenu();
+    contextMenu->addItems(new CSMenuItem("Item1", [](){ std::cerr << "Click Item1" << std::endl; }, CSKeyCode("R", true, false, true)),
+                         new CSMenuItem("Item2", [](){ std::cerr << "Click Item2" << std::endl; }, CSKeyCode("T", true, false, false)));
+
     CSLabel* label = new CSLabel("label");
 
     CSTextField* text = new CSTextField();
@@ -42,20 +59,12 @@ int main() {
     CSTableViewDataSource* dataSource = new DataSource();
     CSTableView* table = new CSTableView();
     table->setDataSource(dataSource);
+    table->setContextMenu(contextMenu);
     table->addColumn("Column");
 
     CSAlignView* align = new CSAlignView(CSAlignView::Direction::Horizontal);
     align->addView(label, false);
     align->addView(text, true);
-
-    CSMenuBar* menuBar = new CSMenuBar();
-    CSSubMenu* subMenu = new CSSubMenu("SubMenu");
-    subMenu->addItem(new CSMenuItem("Item", [](){ std::cerr << "Click Item" << std::endl; }));
-    CSSubMenu* subSubMenu = new CSSubMenu("SubSubMenu");
-    subSubMenu->addItems(new CSMenuItem("Item1", [](){ std::cerr << "Click Item1" << std::endl; }),
-                         new CSMenuItem("Item2", [](){ std::cerr << "Click Item2" << std::endl; }));
-    subMenu->addSubMenu(subSubMenu, [](){ std::cerr << "Click SubSubMenu" << std::endl; });
-    menuBar->addSubMenu(subMenu, [](){ std::cerr << "Click SubMenu" << std::endl; });
 
     CSRect size = CSRect(0, 0, 500, 500);
     CSWindow* window = new CSWindow(size,

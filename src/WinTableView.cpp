@@ -28,7 +28,8 @@ WinTableView::WinTableView(CSRect rect) {
     this->RowHeadersVisible = true;
     this->AllowDrop = true;
     this->AllowUserToAddRows = false;
-    this->ClipboardCopyMode = System::Windows::Forms::DataGridViewClipboardCopyMode::EnableWithoutHeaderText;
+    this->AllowUserToDeleteRows = false;
+    this->ClipboardCopyMode = System::Windows::Forms::DataGridViewClipboardCopyMode::Disable;
     this->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
     this->Location = rect.origin.toNativePoint();
     this->Size = rect.size.toNativeSize();

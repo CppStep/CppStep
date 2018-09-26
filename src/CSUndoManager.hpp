@@ -27,8 +27,8 @@
 /** An undo manager */
 class CSUndoManager {
 public:
-    /** Create a CSUndoManager */
-    CSUndoManager();
+    // /** Create a CSUndoManager */
+    // CSUndoManager();
 
     /** Register an undo to the stack
       * @param f The function that will perform the undo
@@ -81,11 +81,11 @@ private:
         }
     };
 
-    UndoItem* undoStack; /**< The stack of undos */
-    UndoItem* redoStack; /**< The stack of redos */
+    UndoItem* undoStack = nullptr; /**< The stack of undos */
+    UndoItem* redoStack = nullptr; /**< The stack of redos */
 
-    bool isUndoing; /**< Is undoing an event. While undoing a new event registered is a redo. */
-    bool isRedoing; /**< Is redoing an event. While redoing a new event registered should not clear the redo stack. */
+    bool isUndoing = false; /**< Is undoing an event. While undoing a new event registered is a redo. */
+    bool isRedoing = false; /**< Is redoing an event. While redoing a new event registered should not clear the redo stack. */
 };
 
 

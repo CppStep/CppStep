@@ -68,6 +68,7 @@ void CSWindow::presentView(CSView* view, CSMenuBar* menuBar) {
     if (menuBar == nullptr) {
         root = view;
     } else {
+        nativeWindow->MainMenuStrip = menuBar->toNativeMenu();
         CSAlignView* align = new CSAlignView(CSAlignView::Direction::Vertical);
         align->addView(new CSArbitraryView(menuBar->toNativeMenu()), false);
         align->addView(view, true);
