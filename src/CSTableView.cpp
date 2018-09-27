@@ -25,6 +25,11 @@ CSTableView::CSTableView(CSRect rect) {
 #if defined(CS_Mac)
     nativeTableView = [[NSTableView alloc] initWithFrame:rect.toNativeRect()];
     [nativeTableView setAllowsMultipleSelection:NO];
+    [nativeTableView setUsesAlternatingRowBackgroundColors:YES];
+    
+    [nativeTableView setDraggingSourceOperationMask:NSDragOperationCopy forLocal:YES];
+    [nativeTableView setDraggingSourceOperationMask:NSDragOperationCopy forLocal:NO];
+    [nativeTableView registerForDraggedTypes:@[NSPasteboardTypeString]];
     
     nativeView = [[NSScrollView alloc] initWithFrame:NSZeroRect];
     [nativeView setDocumentView:nativeTableView];
@@ -39,6 +44,7 @@ void CSTableView::setDataSource(CSTableViewDataSource* dataSourceTMP) {
 #if defined(CS_Mac)
     nativeDataSource = [[CSNSTableViewDataSource alloc] initWithDataSource: dataSource];
     [nativeTableView setDataSource: nativeDataSource];
+    //[nativeTableView setDelegate: nativeDataSource];
 #elif defined(CS_Win)
     nativeView->setDataSource(dataSource);
 #endif
@@ -46,7 +52,7 @@ void CSTableView::setDataSource(CSTableViewDataSource* dataSourceTMP) {
 
 void CSTableView::setContextMenu(CSContextMenu* contextMenu) {
 #if defined(CS_Mac)
-    [nativeTableView setDataSource: [[CSNSTableViewDataSource alloc] initWithDataSource: dataSource]];
+    //TODO: Add Context Menu
 #elif defined(CS_Win)
     nativeView->ContextMenuStrip = contextMenu->toNativeMenu();
 #endif

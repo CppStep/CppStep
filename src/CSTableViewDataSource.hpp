@@ -71,7 +71,7 @@ public:
     }
     /** Set the value to be dropped into a given row
       * @param row   The index of the row
-      * @parma value The string value to be droppped
+      * @param value The string value to be droppped
       */
     virtual void dropStringValueInRow(int row, std::string value) {
         throw "Not Implemented";

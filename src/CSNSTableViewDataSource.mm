@@ -56,9 +56,8 @@
          toPasteboard:(NSPasteboard*)pboard {
     int row = (int)[rowIndexes firstIndex];
     if (dataSource->canDragFromRow(row)) {
-        [pboard declareTypes:[NSArray<NSString*>
-                arrayWithObject:NSPasteboardTypeString]
-                owner:self];
+        [pboard declareTypes:@[NSPasteboardTypeString]
+                owner:nil];
         [pboard setString:[[NSString alloc] initWithStdString:dataSource->dragStringValueFromRow(row)]
                 forType:NSPasteboardTypeString];
         return YES;
