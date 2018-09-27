@@ -34,7 +34,7 @@ CSTextField::CSTextField(CSRect rect) {
 
 std::string CSTextField::getText() {
   #if defined(CS_Mac)
-      return std::string([[nativeView stringValue] cStringUsingEncoding: NSUTF8StringEncoding]);
+      return [[nativeView stringValue] stdString];
   #elif defined(CS_Win)
       return msclr::interop::marshal_as<std::string>(nativeView->Text);
   #endif
@@ -50,7 +50,7 @@ void CSTextField::setText(std::string text) {
 
 void CSTextField::setCallback(std::function<bool(std::string)> callback) {
 #if defined(CS_Mac)
-    [nativeView setCallback: callback];
+    nativeDelegate = [nativeView setCallback: callback];
 #elif defined(CS_Win)
     callbackWrapper = gcnew WinTextFieldCallbackWrapper(callback);
     nativeView->Leave += gcnew System::EventHandler(callbackWrapper, &WinTextFieldCallbackWrapper::leave);

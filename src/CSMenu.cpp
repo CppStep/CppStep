@@ -34,7 +34,7 @@ CSMenuItem::CSMenuItem(std::string title, std::function<void()> callback, CSKeyC
 CSMenuItem::CSMenuItem(CSSubMenu* subMenu, std::function<void()> callback, CSKeyCode keyCode) :
 #if defined(CS_Mac)
     CSMenuItem(subMenu->name, keyCode) {
-    [nativeMenuItem setSubMenu:subMenu->toNativeMenu()];
+    [nativeMenuItem setSubmenu:subMenu->toNativeMenu()];
 }
 #elif defined(CS_Win)
     nativeMenuItem(subMenu->toNativeMenu()) {
@@ -48,9 +48,9 @@ CSMenuItem::NativeMenuItem CSMenuItem::toNativeMenuItem() {
 }
 
 #if defined(CS_Mac)
-void CSMenuItem::CSMenuItem(std::string name, CSKeyCode keyCode) :
+CSMenuItem::CSMenuItem(std::string name, CSKeyCode keyCode) :
     nativeMenuItem([[NSMenuItem alloc] initWithTitle:@(name.c_str())
                                               action:nil
-                                       keyEquivalent:keyCode->toNativeKeyCode()
+                                       keyEquivalent:keyCode.toNativeKeyCode()
                     ]) {}
 #endif

@@ -31,7 +31,7 @@ void CSAlignView::addView(CSView* subView, bool expanding) {
 }
 
 void CSAlignView::relayout() {
-    int noExpanding = std::count_if(subViews.begin(),
+    long noExpanding = std::count_if(subViews.begin(),
                                     subViews.end(),
                                     [](std::pair<CSView*, bool> subView) {
                                         return subView.second;
@@ -86,7 +86,11 @@ void CSAlignView::relayout() {
                     view->setHeight(expandedLength);
                 }
                 view->setWidth(getWidth());
+#if defined(CS_Mac)
+                view->setY(getHeight() - length - view->getHeight());
+#elif defined(CS_Win)
                 view->setY(length);
+#endif
                 view->setX((getWidth() - view->getWidth()) / 2);
                 length += view->getHeight();
                 break;

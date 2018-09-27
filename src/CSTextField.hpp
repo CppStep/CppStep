@@ -27,6 +27,8 @@
 #include "CSRect.hpp"
 
 #if defined(CS_Mac)
+#import "NSTextField.h"
+#import "NSString.h"
 #import <AppKit/AppKit.h>
 #elif defined(CS_Win)
 #include "WinNativeEventHandler.hpp"
@@ -93,7 +95,9 @@ public:
     virtual CSView::NativeView toNativeView();
 private:
     NativeView nativeView;
-#if defined(CS_Win)
+#if defined(CS_Mac)
+    CSTextFieldCallback* nativeDelegate;
+#elif defined(CS_Win)
     msclr::gcroot<WinTextFieldCallbackWrapper^> callbackWrapper;
 #endif
 };

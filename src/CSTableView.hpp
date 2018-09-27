@@ -57,7 +57,7 @@ public:
     /** Set the Data Source
       * @param dataSource The Data Source
       */
-    void setDataSource(CSTableViewDataSource* dataSourceTMP);
+    void setDataSource(CSTableViewDataSource* dataSource);
 
     /** Set the context (right click) menu
       * @param contextMenu The context menu
@@ -84,7 +84,7 @@ public:
     void reload();
 
 #if defined(CS_Mac)
-    typedef NSTableView* NativeView;
+    typedef NSScrollView* NativeView;
 #elif defined(CS_Win)
     typedef msclr::gcroot<WinTableView^> NativeView;
 #endif
@@ -93,6 +93,11 @@ private:
     NativeView nativeView;
 
     CSTableViewDataSource* dataSource;
+#if defined(CS_Mac)
+    NSTableView* nativeTableView;
+    CSNSTableViewDataSource* nativeDataSource;
+#elif defined(CS_Win)
+#endif
 };
 
 #endif /* CSTableView_hpp */

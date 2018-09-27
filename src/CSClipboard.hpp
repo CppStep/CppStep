@@ -24,8 +24,11 @@
 
 #include "CSCore.hpp"
 
+#include <string>
+
 #if defined(CS_Mac)
-#import <Foundation/Foundation.h>
+#import "NSString.h"
+#import <AppKit/AppKit.h>
 #elif defined(CS_Win)
 #using <System.Windows.Forms.dll>
 #include <msclr\marshal_cppstd.h>

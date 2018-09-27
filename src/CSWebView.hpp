@@ -23,6 +23,7 @@
 #define CSWebView_hpp
 
 #include "CSCore.hpp"
+#include "CSView.hpp"
 
 #include <string>
 
@@ -40,11 +41,11 @@ public:
     CSWebView(std::string contentsTMP);
 
 #if defined(CS_Mac)
-    typedef WkWebView* NativeView;
+    typedef WKWebView* NativeView;
 #elif defined(CS_Win)
     typedef msclr::gcroot<System::Windows::Forms::WebBrowser> NativeView;
 #endif
-    NativeView toNativeView();
+    CSView::NativeView toNativeView();
 private:
     std::string contents;
 };

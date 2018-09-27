@@ -6,12 +6,14 @@
 //  Copyright © 2018 Jonathan Tanner. All rights reserved.
 //
 
+#import "NSString.h"
+
 #import <AppKit/AppKit.h>
 
 #include <functional>
 #include <string>
 
-@interface CSTextFieldCallback (NSObject, NSTextFieldDelegate)
+@interface CSTextFieldCallback : NSObject <NSTextFieldDelegate>
 
 - (id) initWithFunction:(std::function<bool(std::string)>)function; /**< Create a callback object with the given function */
 
@@ -21,6 +23,6 @@
 
 @interface NSTextField (CSCallback)
 
-- (void) setCallback:(std::function<bool(std::string)>)callback;
+- (CSTextFieldCallback*) setCallback:(std::function<bool(std::string)>)callback  __attribute__((warn_unused_result));
 
 @end

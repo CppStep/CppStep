@@ -1,5 +1,5 @@
 //
-//  CSApp.hpp
+//  CSThread.hpp
 //  CppStep
 //
 //  Copyright � 2018 Jonathan Tanner. All rights reserved.
@@ -19,17 +19,22 @@
 //You should have received a copy of the GNU General Public License
 //along with CppStep.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef CSApp_hpp
-#define CSApp_hpp
+#ifndef CSThread_hpp
+#define CSThread_hpp
 
 #include "CSCore.hpp"
 
-namespace CSApp {
-    /** Initialise the Application */
-    void Init();
+#include <functional>
 
-    /** Begin the main runloop */
-    void Run(bool isMain);
+#if defined(CS_Mac)
+#import <Dispatch/Dispatch.h>
+#elif defined(CS_Win)
+#import <thread>
+#endif
+
+namespace CSThread {
+    /** Dispatch to Main Thread */
+    void dispatchMain(std::function<void()> function);
 }
 
-#endif /* CSApp_hpp */
+#endif /* CSThread_hpp */

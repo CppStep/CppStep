@@ -25,6 +25,7 @@
 #include "CSCore.hpp"
 
 #if defined(CS_Mac)
+#import "NSString.h"
 #import <Foundation/Foundation.h>
 #elif defined(CS_Win)
 #using <System.Windows.Forms.dll>
@@ -53,6 +54,8 @@ public:
 
     CSKeyCode(std::string keyString, bool cmd, bool mod, bool shift) :
 #if defined(CS_Mac)
+        nativeKeyCode([[NSString alloc] initWithStdString:keyString]) {}
+        //TODO: Add cmd, mod, shift
 #elif defined(CS_Win)
         nativeKeyCode((NativeKeyCode)System::Enum::Parse(NativeKeyCode::typeid, gcnew System::String(keyString.c_str()), true)) {
         if (cmd) {

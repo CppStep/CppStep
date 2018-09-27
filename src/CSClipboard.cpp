@@ -31,7 +31,7 @@ void CSClipboard::clear() {
 
 std::string CSClipboard::getStringValue() {
 #if defined(CS_Mac)
-    return std::string([[[NSPasteboard generalPasteboard] stringForType:NSPasteboardTypeString] UTF8String]);
+    return [[[NSPasteboard generalPasteboard] stringForType:NSPasteboardTypeString] stdString];
 #elif defined(CS_Win)
     return msclr::interop::marshal_as<std::string>(System::Windows::Forms::Clipboard::GetText());
 #endif

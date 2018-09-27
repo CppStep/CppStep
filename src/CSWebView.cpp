@@ -25,9 +25,9 @@ CSWebView::CSWebView(std::string contentsTMP) {
     contents = contentsTMP;
 }
 
-CSWebView::NativeView CSWebView::toNativeView() {
+CSView::NativeView CSWebView::toNativeView() {
 #if defined(CS_Mac)
-    WkWebView* nativeView = [[WkWebView alloc] initWithFrame: [CGRect zero]];
+    NativeView nativeView = [[WKWebView alloc] initWithFrame: CGRectZero];
     [nativeView loadHTMLString: @(contents.c_str()) baseURL: [NSURL URLWithString: @"/"]];
 #elif defined(CS_Win)
     NativeView nativeView = gcnew System::Windows::Forms::WebBrowser();

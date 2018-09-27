@@ -31,15 +31,18 @@
 
 void CSApp::Init() {
 #if defined(CS_Mac)
+#elif defined(CS_Win)
+    //TODO: Check if these are required as they were in the Mac section
     ProcessSerialNumber psn = { 0, kCurrentProcess };
     TransformProcessType( &psn, kProcessTransformToForegroundApplication );
-#elif defined(CS_Win)
 #endif
 }
 /** Enter the main runloop */
-void CSApp::Run() {
+void CSApp::Run(bool isMain) {
 #if defined(CS_Mac)
-    [[NSApplication sharedApplication] run];
+    if (isMain) {
+        [[NSApplication sharedApplication] run];
+    }
     [[NSApplication sharedApplication] setActivationPolicy:NSApplicationActivationPolicyRegular];//Accessory];
     [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
 #elif defined(CS_Win)

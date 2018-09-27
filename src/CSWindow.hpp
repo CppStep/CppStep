@@ -105,7 +105,9 @@ public:
 private:
     CSView* root;
     NativeWindow nativeWindow;
-#if defined(CS_Win)
+#if defined(CS_Mac)
+    CSWindowCallbacks* nativeDelegate;
+#elif defined(CS_Win)
     msclr::gcroot<WinWindowClosingCallbackWrapper^> closingCallbackWrapper;
 #endif
 };

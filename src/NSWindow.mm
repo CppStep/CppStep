@@ -9,12 +9,14 @@
 #import "NSWindow.h"
 
 @implementation CSWindowCallbacks {
-    std::function<void()> function;
+    std::function<void()> resizeFunction;
+    std::function<bool()> closeFunction;
 }
 
-- (id) initWithFunction:(std::function<void()>)functionTMP {
+- (id) initWithResizeFunction:(std::function<void()>)resizeFunctionTMP closeFunction:(std::function<bool()>)closeFunctionTMP {
     if ( self = [super init] ) {
-        function = functionTMP;
+        resizeFunction = resizeFunctionTMP;
+        closeFunction = closeFunctionTMP;
         return self;
     } else {
         return nil;
@@ -22,7 +24,11 @@
 }
 
 - (void)windowDidResize:(NSNotification *)notification {
-    function();
+    resizeFunction();
+}
+
+- (BOOL)windowShouldClose:(NSWindow *)sender {
+    return closeFunction();
 }
 
 @end
@@ -40,23 +46,25 @@
                                          | (NSWindowStyleMaskResizable * resizable)
                                          | NSWindowStyleMaskMiniaturizable
                                   backing: NSBackingStoreBuffered
-                                    defer: NO
+                                    defer: YES
                  ] ) {
         [self setReleasedWhenClosed: NO];
         [self setTitle: @(title.c_str())];
-        [self makeKeyAndOrderFront: nil];
         return self;
     } else {
         return nil;
     }
 }
 
-- (void) presentView:(CSView*)view {
-    [self setContentView: view->toNativeView()];
+- (void) presentView:(CSView*)view menuBar:(CSMenuBar*)menuBar {
+    [self setContentView:view->toNativeView()];
+    [self setMenu:menuBar->toNativeMenu()];
 }
 
-- (void) setCallback:(std::function<void()>)callback {
-    [self setDelegate: [[CSWindowCallbacks alloc] initWithFunction: callback]];
+- (CSWindowCallbacks*) setResizeCallback:(std::function<void()>)resizeCallback closeCallback:(std::function<bool()>)closeCallback {
+    CSWindowCallbacks* delegate = [[CSWindowCallbacks alloc] initWithResizeFunction:resizeCallback closeFunction:closeCallback];
+    [self setDelegate: delegate];
+    return delegate;
 }
 
 @end

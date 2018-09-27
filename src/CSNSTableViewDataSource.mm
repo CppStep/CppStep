@@ -19,44 +19,48 @@
 //You should have received a copy of the GNU General Public License
 //along with CppStep.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef CSNSTableViewDataSource_mm
-#define CSNSTableViewDataSource_mm
+#import "CSNSTableViewDataSource.h"
 
-
-@interface CSNSTableViewDataSource : NSTableView <NSTableViewDataSource> {
+@implementation CSNSTableViewDataSource {
     CSTableViewDataSource* dataSource;
 }
 
 - (id) initWithDataSource:(CSTableViewDataSource*)dataSourceTMP {
-    dataSource = dataSourceTMP
+    if (self = [self init]) {
+        dataSource = dataSourceTMP;
+        return self;
+    } else {
+        return nil;
+    }
 }
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView*)tableView {
-    return @(dataSource->numberOfRows());
+    return (NSInteger)dataSource->numberOfRows();
 }
 
 - (id) tableView:(NSTableView*)tableView
        objectValueForTableColumn:(NSTableColumn*)tableColumn
        row:(NSInteger)row {
-    return @(dataSource->getStringValueInCell(CSTableColumn(tableColumn), (int)row).c_str());
+    return @(dataSource->getStringValueInCell([[tableColumn identifier] stdString], (int)row).c_str());
 }
 
 - (void) tableView:(NSTableView*)tableView
          setObjectValue:(id)object
          forTableColumn:(NSTableColumn*)tableColumn
          row:(NSInteger)row {
-    dataSource->setStringValueInCell(CSTableColumn(tableColumn), (int)row, std::string([object UTF8String]));
+    dataSource->setStringValueInCell([[tableColumn identifier] stdString], (int)row, [object stdString]);
 }
 
 - (BOOL) tableView:(NSTableView*)tableView
          writeRowsWithIndexes:(NSIndexSet*)rowIndexes
          toPasteboard:(NSPasteboard*)pboard {
-    if (dataSource->canDragFromRow(rowIndexes[0])) {
+    int row = (int)[rowIndexes firstIndex];
+    if (dataSource->canDragFromRow(row)) {
         [pboard declareTypes:[NSArray<NSString*>
-                arrayWithObject:NSStringPboardType]
+                arrayWithObject:NSPasteboardTypeString]
                 owner:self];
-        [pboard setString:dataSource->dragStringValueFromRow(rowIndexes[0])
-                forType:NSStringPboardType];
+        [pboard setString:[[NSString alloc] initWithStdString:dataSource->dragStringValueFromRow(row)]
+                forType:NSPasteboardTypeString];
         return YES;
     } else {
         return NO;
@@ -67,7 +71,7 @@
                     validateDrop:(id<NSDraggingInfo>)info
                     proposedRow:(NSInteger)row
                     proposedDropOperation:(NSTableViewDropOperation)dropOperation {
-    if (dataSource->canDropIntoRow(row)) {
+    if (dataSource->canDropIntoRow((int)row)) {
         return NSDragOperationCopy;
     } else {
         return NSDragOperationNone;
@@ -78,10 +82,8 @@
          acceptDrop:(id<NSDraggingInfo>)info
          row:(NSInteger)row
          dropOperation:(NSTableViewDropOperation)dropOperation {
-    dataSource->dropStringValueInRow(row, std::string([[[info draggingPasteboard] stringForType:NSStringPboardType] UTF8String]))
+    dataSource->dropStringValueInRow((int)row, [[[info draggingPasteboard] stringForType:NSPasteboardTypeString] stdString]);
     return YES;
 }
 
 @end
-
-#endif /* CSNSTableViewDataSource_mm */

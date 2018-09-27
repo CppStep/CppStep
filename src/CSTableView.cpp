@@ -23,8 +23,12 @@
 
 CSTableView::CSTableView(CSRect rect) {
 #if defined(CS_Mac)
-    nativeView = [[NSTableView alloc] initWithFrame:rect.toNativeRect()];
-    [nativeView setAllowsMultipleSelection:NO];
+    nativeTableView = [[NSTableView alloc] initWithFrame:rect.toNativeRect()];
+    [nativeTableView setAllowsMultipleSelection:NO];
+    
+    nativeView = [[NSScrollView alloc] initWithFrame:NSZeroRect];
+    [nativeView setDocumentView:nativeTableView];
+    [nativeView setHasVerticalScroller:YES];
 #elif defined(CS_Win)
     nativeView = gcnew WinTableView(rect);
 #endif
@@ -33,7 +37,8 @@ CSTableView::CSTableView(CSRect rect) {
 void CSTableView::setDataSource(CSTableViewDataSource* dataSourceTMP) {
     dataSource = dataSourceTMP;
 #if defined(CS_Mac)
-    [nativeView setDataSource: [[CSNSTableViewDataSource alloc] initWithDataSource: dataSource]];
+    nativeDataSource = [[CSNSTableViewDataSource alloc] initWithDataSource: dataSource];
+    [nativeTableView setDataSource: nativeDataSource];
 #elif defined(CS_Win)
     nativeView->setDataSource(dataSource);
 #endif
@@ -41,7 +46,7 @@ void CSTableView::setDataSource(CSTableViewDataSource* dataSourceTMP) {
 
 void CSTableView::setContextMenu(CSContextMenu* contextMenu) {
 #if defined(CS_Mac)
-    //[nativeView setDataSource: [[CSNSTableViewDataSource alloc] initWithDataSource: dataSource]];
+    [nativeTableView setDataSource: [[CSNSTableViewDataSource alloc] initWithDataSource: dataSource]];
 #elif defined(CS_Win)
     nativeView->ContextMenuStrip = contextMenu->toNativeMenu();
 #endif
@@ -49,7 +54,9 @@ void CSTableView::setContextMenu(CSContextMenu* contextMenu) {
 
 void CSTableView::addColumn(std::string name) {
 #if defined(CS_Mac)
-    [nativeView addTableColumn: [[NSTableColumn alloc] initWithIdentifier: @(name.c_str())]];
+    NSTableColumn* column = [[NSTableColumn alloc] initWithIdentifier: [[NSString alloc] initWithStdString:name]];
+    [column setTitle:[[NSString alloc] initWithStdString:name]];
+    [nativeTableView addTableColumn: column];
 #elif defined(CS_Win)
     nativeView->addColumn(name);
 #endif
@@ -57,7 +64,10 @@ void CSTableView::addColumn(std::string name) {
 
 void CSTableView::setHeaderColumn(std::string name) {
 #if defined(CS_Mac)
-    [nativeView addTableColumn: [[NSTableColumn alloc] initWithIdentifier: @(name.c_str())]];
+    NSTableColumn* column = [[NSTableColumn alloc] initWithIdentifier: [[NSString alloc] initWithStdString:name]];
+    [column setTitle:[[NSString alloc] initWithStdString:name]];
+    [nativeTableView addTableColumn: column];
+    [nativeTableView moveColumn:[nativeTableView numberOfColumns] - 1 toColumn:0];
 #elif defined(CS_Win)
     nativeView->setHeaderColumn(name);
 #endif
@@ -65,7 +75,7 @@ void CSTableView::setHeaderColumn(std::string name) {
 
 int CSTableView::getSelectedRow() {
 #if defined(CS_Mac)
-    return (int)[nativeView selectedColumn];
+    return (int)[nativeTableView selectedColumn];
 #elif defined(CS_Win)
     if (nativeView->SelectedRows->Count > 0) {
         return nativeView->SelectedRows[0]->Index;
@@ -77,7 +87,7 @@ int CSTableView::getSelectedRow() {
 
 void CSTableView::reload() {
 #if defined(CS_Mac)
-    [nativeView reloadData];
+    [nativeTableView reloadData];
 #elif defined(CS_Win)
     nativeView->Refresh();
 #endif

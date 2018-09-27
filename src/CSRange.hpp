@@ -35,9 +35,9 @@ struct CSRange {
       * @param pos   The starting position of the range
       * @param count The length of the range
       */
-    CSRange(size_t posTMP, size_t countTMP) {
-        pos = posTMP;
-        count = countTMP;
+    CSRange(size_t pos, size_t count) {
+        this->pos = pos;
+        this->count = count;
     }
 };
 

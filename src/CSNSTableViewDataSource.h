@@ -23,6 +23,7 @@
 #define CSNSTableViewDataSource_h
 
 #include "CSTableViewDataSource.hpp"
+#import "NSString.h"
 #import <AppKit/AppKit.h>
 
 /** An NSTableViewDataSource wrapper for a CSTableViewDataSource */

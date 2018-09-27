@@ -8,24 +8,31 @@
 
 #import "NSTextField.h"
 
-@implementation CSTextFieldCallbacks {
+@implementation CSTextFieldCallback {
     std::function<bool(std::string)> function;
 }
 
 - (id) initWithFunction:(std::function<bool(std::string)>)functionTMP {
-    function = functionTMP;
+    if (self = [self init]) {
+        function = functionTMP;
+        return self;
+    } else {
+        return nil;
+    }
 }
 
 - (BOOL)control:(NSControl*)control textShouldEndEditing:(NSText*)fieldEditor {
-    function(std::string([fieldEditor cStringUsingEncoding: NSUTF8StringEncoding]));
+    return function([[fieldEditor string] stdString]);
 }
 
 @end
 
 @implementation NSTextField (CSCallbacks)
 
-- (void) setCallback:(std::function<bool(std::string)>)callback {
-    [self setDelegate: [[CSTextFieldCallback alloc] initWithFunction: callback]];
+- (CSTextFieldCallback*) setCallback:(std::function<bool(std::string)>)callback {
+    CSTextFieldCallback* delegate = [[CSTextFieldCallback alloc] initWithFunction: callback];
+    [self setDelegate: delegate];
+    return delegate;
 }
 
 @end

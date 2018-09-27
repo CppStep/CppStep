@@ -8,6 +8,7 @@
 
 #include "CSView.hpp"
 #include "CSRect.hpp"
+#include "CSMenu.hpp"
 
 #import <AppKit/AppKit.h>
 
@@ -16,9 +17,11 @@
 
 @interface CSWindowCallbacks : NSObject <NSWindowDelegate>
 
-- (id) initWithFunction:(std::function<void()>)function; /**< Create a callback object with the given function */
+- (id) initWithResizeFunction:(std::function<void()>)resizeFunction closeFunction:(std::function<bool()>)closeFunction; /**< Create a callback object with the given function */
 
 - (void)windowDidResize:(NSNotification *)notification;
+
+- (BOOL)windowShouldClose:(NSWindow *)sender;
 
 @end
 
@@ -32,10 +35,10 @@
 ;
 
 /** Present the given CSView */
-- (void) presentView:(CSView*)view;
+- (void) presentView:(CSView*)view menuBar:(CSMenuBar*)menuBar;
 
 /** Set the windowDidResize callback to the given function */
-- (void) setCallback:(std::function<void()>)callback;
+- (CSWindowCallbacks*) setResizeCallback:(std::function<void()>)resizeCallback closeCallback:(std::function<bool()>)closeCallback  __attribute__((warn_unused_result));
 
 @end
 

@@ -48,11 +48,13 @@ public:
     /** Create a CSArbitraryView
       * @param view The native view to display
       */
+#if defined(CS_Win)
     template <typename T>
     CSArbitraryView(msclr::gcroot<T> view) {
         T managedView = view;
         nativeView = dynamic_cast<System::Windows::Forms::Control^>(managedView);
     }
+#endif
 
     typedef CSView::NativeView NativeView;
     virtual CSView::NativeView toNativeView() {

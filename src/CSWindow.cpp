@@ -33,7 +33,7 @@ CSWindow::CSWindow(CSRect rect,
                                        isClosable: closable
                                       isResizable: resizable
                    ];
-    [nativeWindow setCallback: relayoutF];
+    nativeDelegate = [nativeWindow setResizeCallback:relayoutF closeCallback:[](){return true;}];
 #elif defined(CS_Win)
     nativeWindow = gcnew WinForm(rect,
                                  title,
@@ -46,7 +46,7 @@ CSWindow::CSWindow(CSRect rect,
 
 void CSWindow::show() {
 #if defined(CS_Mac)
-    [nativeWindow setHidden:NO];
+    [nativeWindow makeKeyAndOrderFront:nil];
 #elif defined(CS_Win)
     nativeWindow->Show();
 #endif
@@ -54,7 +54,7 @@ void CSWindow::show() {
 
 void CSWindow::hide() {
 #if defined(CS_Mac)
-    [nativeWindow setHidden:YES];
+    [nativeWindow orderOut:nil];
 #elif defined(CS_Win)
     nativeWindow->Hide();
 #endif
@@ -63,7 +63,7 @@ void CSWindow::hide() {
 void CSWindow::presentView(CSView* view, CSMenuBar* menuBar) {
 #if defined(CS_Mac)
     root = view;
-    [nativeWindow presentView: root menuBar:menuBar];
+    [nativeWindow presentView:root menuBar:menuBar];
 #elif defined(CS_Win)
     if (menuBar == nullptr) {
         root = view;
@@ -80,8 +80,13 @@ void CSWindow::presentView(CSView* view, CSMenuBar* menuBar) {
 }
 
 void CSWindow::setClosingCallback(std::function<bool()> callback) {
+#if defined(CS_Mac)
+    std::function<void()>&& relayoutF = std::bind(&CSWindow::relayout, this);
+    nativeDelegate = [nativeWindow setResizeCallback:relayoutF closeCallback:callback];
+#elif defined(CS_Win)
     closingCallbackWrapper = gcnew WinWindowClosingCallbackWrapper(callback);
     nativeWindow->Closing += gcnew System::ComponentModel::CancelEventHandler(closingCallbackWrapper, &WinWindowClosingCallbackWrapper::WindowClosing);
+#endif
 }
 
 void CSWindow::relayout() {

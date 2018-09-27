@@ -38,13 +38,15 @@
 #include <string>
 #include <type_traits>
 
-template <bool, bool> class CSMenu;
-
 #if defined(CS_Mac)
+class CSMenu;
+
 typedef CSMenu CSMenuBar;
 typedef CSMenu CSContextMenu;
 typedef CSMenu CSSubMenu;
 #elif defined(CS_Win)
+template <bool, bool> class CSMenu;
+
 typedef CSMenu<true, false> CSMenuBar;
 typedef CSMenu<true, true> CSContextMenu;
 typedef CSMenu<false, false> CSSubMenu;
@@ -56,7 +58,7 @@ public:
     CSMenuItem(CSSubMenu* subMenu, std::function<void()> callback = [](){}, CSKeyCode keyCode = CSKeyCode());
 
 #if defined(CS_Mac)
-    typedef MSMenuItem* nativeMenuItem;
+    typedef NSMenuItem* NativeMenuItem;
 #elif defined(CS_Win)
     typedef msclr::gcroot<System::Windows::Forms::ToolStripMenuItem^> NativeMenuItem;
 #endif
@@ -65,7 +67,7 @@ private:
     NativeMenuItem nativeMenuItem;
 
 #if defined(CS_Mac)
-    void CSMenuItem(std::string name, CSKeyCode keyCode);
+    CSMenuItem(std::string name, CSKeyCode keyCode);
 #endif
 };
 
@@ -76,7 +78,7 @@ template <bool isTopLevel = true, bool isContextMenu = false>
 class CSMenu {
 public:
 #if defined(CS_Mac)
-    typedef MSMenu* NativeMenu;
+    typedef NSMenu* NativeMenu;
 #elif defined(CS_Win)
     typedef typename std::conditional<isTopLevel,
                                       typename std::conditional<isContextMenu,
@@ -84,15 +86,15 @@ public:
                                                                 msclr::gcroot<System::Windows::Forms::MenuStrip^>>::type,
                                       msclr::gcroot<System::Windows::Forms::ToolStripMenuItem^>>::type NativeMenu;
 #endif
-    virtual NativeMenu toNativeMenu() {
-        return nativeMenu;
-    }
 private:
     NativeMenu nativeMenu;
 public:
+    const std::string name;
+    
     CSMenu(std::string name = "")
 #if defined(CS_Mac)
-        : nativeMenu([[NSMenu alloc] initWithTitle:@(name.c_str())]) {}
+        : nativeMenu([[NSMenu alloc] initWithTitle:@(name.c_str())]),
+          name(name) {}
 #elif defined(CS_Win)
     {
         if constexpr (isTopLevel) {
@@ -107,6 +109,10 @@ public:
         }
     }
 #endif
+
+    virtual NativeMenu toNativeMenu() {
+        return nativeMenu;
+    }
 
     void addItem(CSMenuItem* item) {
 #if defined(CS_Mac)
