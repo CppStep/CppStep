@@ -29,7 +29,7 @@
 #if defined(CS_Mac)
 #import <Dispatch/Dispatch.h>
 #elif defined(CS_Win)
-#import <thread>
+#include <thread>
 #endif
 
 namespace CSThread {
