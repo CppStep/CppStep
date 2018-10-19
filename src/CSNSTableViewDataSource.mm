@@ -70,10 +70,15 @@
                     validateDrop:(id<NSDraggingInfo>)info
                     proposedRow:(NSInteger)row
                     proposedDropOperation:(NSTableViewDropOperation)dropOperation {
-    if (dataSource->canDropIntoRow((int)row)) {
-        return NSDragOperationCopy;
-    } else {
-        return NSDragOperationNone;
+    switch (dropOperation) {
+        case NSTableViewDropOn:
+            if (dataSource->canDropIntoRow((int)row)) {
+                return NSDragOperationCopy;
+            } else {
+                return NSDragOperationNone;
+            }
+        case NSTableViewDropAbove:
+            return NSDragOperationNone;
     }
 }
 
@@ -81,8 +86,13 @@
          acceptDrop:(id<NSDraggingInfo>)info
          row:(NSInteger)row
          dropOperation:(NSTableViewDropOperation)dropOperation {
-    dataSource->dropStringValueInRow((int)row, [[[info draggingPasteboard] stringForType:NSPasteboardTypeString] stdString]);
-    return YES;
+    switch (dropOperation) {
+        case NSTableViewDropOn:
+            dataSource->dropStringValueInRow((int)row, [[[info draggingPasteboard] stringForType:NSPasteboardTypeString] stdString]);
+            return YES;
+        case NSTableViewDropAbove:
+            return NO;
+    }
 }
 
 @end

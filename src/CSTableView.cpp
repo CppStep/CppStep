@@ -81,7 +81,7 @@ void CSTableView::setHeaderColumn(std::string name) {
 
 int CSTableView::getSelectedRow() {
 #if defined(CS_Mac)
-    return (int)[nativeTableView selectedColumn];
+    return (int)[nativeTableView selectedRow];
 #elif defined(CS_Win)
     if (nativeView->SelectedRows->Count > 0) {
         return nativeView->SelectedRows[0]->Index;

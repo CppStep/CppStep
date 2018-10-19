@@ -24,9 +24,11 @@
 
 #include "CSCore.hpp"
 
+#include <utility>
+
 #if defined(CS_Mac)
 #import "NSString.h"
-#import <Foundation/Foundation.h>
+#import <AppKit/AppKit.h>
 #elif defined(CS_Win)
 #using <System.Windows.Forms.dll>
 #include <msclr\gcroot.h>
@@ -38,7 +40,7 @@
 struct CSKeyCode {
 public:
 #if defined(CS_Mac)
-    typedef NSString* NativeKeyCode;
+    typedef std::pair<NSString*, NSEventModifierFlags> NativeKeyCode;
 #elif defined(CS_Win)
     typedef System::Windows::Forms::Keys NativeKeyCode;
 #endif
@@ -47,15 +49,17 @@ private:
 public:
     CSKeyCode() :
 #if defined(CS_Mac)
-        nativeKeyCode(@"") {}
+        nativeKeyCode(std::make_pair(@"", 0)) {}
 #elif defined(CS_Win)
         nativeKeyCode(System::Windows::Forms::Keys::None) {}
 #endif
 
     CSKeyCode(std::string keyString, bool cmd, bool mod, bool shift) :
 #if defined(CS_Mac)
-        nativeKeyCode([[NSString alloc] initWithStdString:keyString]) {}
-        //TODO: Add cmd, mod, shift
+        nativeKeyCode(std::make_pair([[NSString alloc] initWithStdString:keyString],
+                                     (cmd * NSEventModifierFlagCommand) ||
+                                     (mod * NSEventModifierFlagOption) ||
+                                     (shift * NSEventModifierFlagShift))) {}
 #elif defined(CS_Win)
         nativeKeyCode((NativeKeyCode)System::Enum::Parse(NativeKeyCode::typeid, gcnew System::String(keyString.c_str()), true)) {
         if (cmd) {
@@ -72,6 +76,17 @@ public:
 
     NativeKeyCode toNativeKeyCode() {
         return nativeKeyCode;
+    }
+    
+private:
+    CSKeyCode(NativeKeyCode k) : nativeKeyCode(k) {}
+public:
+    static CSKeyCode backspace() {
+#if defined(CS_Mac)
+        return CSKeyCode(std::make_pair([NSString stringWithFormat:@"%c" , NSBackspaceCharacter], 0));
+#elif defined(CS_Win)
+        return CSKeyCode(NativeKeyCode::Back);
+#endif
     }
 };
 

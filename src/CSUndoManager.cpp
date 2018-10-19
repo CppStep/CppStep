@@ -21,12 +21,7 @@
 
 #include "CSUndoManager.hpp"
 
-// CSUndoManager::CSUndoManager() {
-//     undoStack = nullptr;
-//     redoStack = nullptr;
-//     isUndoing = false;
-//     isRedoing = false;
-// }
+#ifndef CSNSUndoManager
 
 void CSUndoManager::registerUndoFunc(std::function<void()> f) {
     if (isUndoing) {
@@ -65,3 +60,15 @@ void CSUndoManager::redo() {
         redoStack = redoStack->next;
     }
 }
+
+// UNTESTED
+CSMenuItem* CSUndoManager::undoMenuItem(CSKeyCode keyCode) {
+    return new CSMenuItem("Undo", std::bind(&CSUndoManager::undo, this), keyCode);
+}
+
+// UNTESTED
+CSMenuItem* CSUndoManager::redoMenuItem(CSKeyCode keyCode) {
+    return new CSMenuItem("Redo", std::bind(&CSUndoManager::redo, this), keyCode);
+}
+
+#endif

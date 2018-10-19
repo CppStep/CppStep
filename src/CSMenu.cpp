@@ -21,11 +21,20 @@
 
 #include "CSMenu.hpp"
 
-CSMenuItem::CSMenuItem(std::string title, std::function<void()> callback, CSKeyCode keyCode) :
+CSMenuItem::CSMenuItem(std::string title, std::function<void()> callback, CSKeyCode keyCode)
 #if defined(CS_Mac)
-    CSMenuItem(title, keyCode) {}
+{
+    auto nKeyCode = keyCode.toNativeKeyCode();
+    nativeMenuItem = [[NSMenuItem alloc] initWithTitle:@(title.c_str())
+                                                action:@selector(execute)
+                                         keyEquivalent:nKeyCode.first
+                        ];
+    nativeTarget = [[NSFunction alloc] initWithFunction:callback];
+    [nativeMenuItem setTarget:nativeTarget];
+    [nativeMenuItem setKeyEquivalentModifierMask:NSEventModifierFlagCommand/*nKeyCode.second*/];
+}
 #elif defined(CS_Win)
-    nativeMenuItem(gcnew System::Windows::Forms::ToolStripMenuItem(gcnew System::String(title.c_str()))) {
+    : nativeMenuItem(gcnew System::Windows::Forms::ToolStripMenuItem(gcnew System::String(title.c_str()))) {
     nativeMenuItem->Click += gcnew_WinNativeEventHandler<void>(callback);
     nativeMenuItem->ShortcutKeys = keyCode.toNativeKeyCode();
 }
@@ -33,7 +42,7 @@ CSMenuItem::CSMenuItem(std::string title, std::function<void()> callback, CSKeyC
 
 CSMenuItem::CSMenuItem(CSSubMenu* subMenu, std::function<void()> callback, CSKeyCode keyCode) :
 #if defined(CS_Mac)
-    CSMenuItem(subMenu->name, keyCode) {
+    CSMenuItem(subMenu->name, callback, keyCode) {
     [nativeMenuItem setSubmenu:subMenu->toNativeMenu()];
 }
 #elif defined(CS_Win)
@@ -43,14 +52,8 @@ CSMenuItem::CSMenuItem(CSSubMenu* subMenu, std::function<void()> callback, CSKey
 }
 #endif
 
+CSMenuItem::CSMenuItem(NativeMenuItem nativeMenuItem) : nativeMenuItem(nativeMenuItem) {}
+
 CSMenuItem::NativeMenuItem CSMenuItem::toNativeMenuItem() {
     return nativeMenuItem;
 }
-
-#if defined(CS_Mac)
-CSMenuItem::CSMenuItem(std::string name, CSKeyCode keyCode) :
-    nativeMenuItem([[NSMenuItem alloc] initWithTitle:@(name.c_str())
-                                              action:nil
-                                       keyEquivalent:keyCode.toNativeKeyCode()
-                    ]) {}
-#endif

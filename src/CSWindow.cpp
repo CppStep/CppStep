@@ -96,3 +96,12 @@ void CSWindow::relayout() {
     root->setSize(CSSize(nativeWindow->ClientSize));
 #endif
 }
+
+CSUndoManager* CSWindow::undoManager() {
+#ifdef CSNSUndoManager
+    //return new CSUndoManager([nativeWindow undoManager]);
+    return new CSUndoManager;
+#else
+    return new CSUndoManager;
+#endif
+}

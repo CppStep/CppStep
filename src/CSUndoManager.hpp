@@ -22,34 +22,34 @@
 #ifndef CSUndoManager_hpp
 #define CSUndoManager_hpp
 
+#include "CSCore.hpp"
+#include "CSMenu.hpp"
+
+#if defined(CS_Mac)
+#define CSNSUndoManager
+#endif
+
 #include <functional>
+
+#ifdef CSNSUndoManager
+#import <Foundation/Foundation.h>
+#endif
 
 /** An undo manager */
 class CSUndoManager {
 public:
-    // /** Create a CSUndoManager */
-    // CSUndoManager();
+#ifdef CSNSUndoManager
+    /** Create a CSUndoManager */
+    CSUndoManager(NSUndoManager* nativeUndoManager);
+
+    /** Create a CSUndoManager */
+    CSUndoManager();
+#endif
 
     /** Register an undo to the stack
       * @param f The function that will perform the undo
       */
     void registerUndoFunc(std::function<void()> f);
-
-    // /** Register an undo to the stack
-    //   * @param f   The function that will perform the undo
-    //   * @param arg The argument to pass the function
-    //   */
-    // template<typename T>
-    // void registerUndoFuncArg(std::function<void(T)> f, T arg) {
-    //     //registerUndoFunc([f, arg]() { f(arg); });
-    //     registerUndoFunc(std::bind(f, arg));
-    // }
-    //
-    // /** Register an undo to the stack with the given function and pair of arguments to pass it */
-    // template<typename S, typename T>
-    // void registerUndoFuncpArg2(void(*f)(S, T), S arg1, T arg2) {
-    //     registerUndoFunc([f, arg1, arg2]() { f(arg1, arg2); });
-    // }
 
     /** Register an undo to the stack that restores the value of the given target
       * @param target The target whose value is to be restored
@@ -64,7 +64,13 @@ public:
     void undo(); /**< Undo the last value from the undo stack */
     bool canRedo(); /**< Get if there is a redo on the stack */
     void redo(); /**< Redo the last value from the redo stack */
+    
+    CSMenuItem* undoMenuItem(CSKeyCode keyCode = CSKeyCode());
+    CSMenuItem* redoMenuItem(CSKeyCode keyCode = CSKeyCode());
 private:
+#ifdef CSNSUndoManager
+    NSUndoManager* nativeUndoManager;
+#else
     /** An event that can be undone */
     class UndoItem {
     public:
@@ -86,6 +92,7 @@ private:
 
     bool isUndoing = false; /**< Is undoing an event. While undoing a new event registered is a redo. */
     bool isRedoing = false; /**< Is redoing an event. While redoing a new event registered should not clear the redo stack. */
+#endif
 };
 
 

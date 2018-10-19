@@ -58,9 +58,9 @@
 
 - (void) presentView:(CSView*)view menuBar:(CSMenuBar*)menuBar {
     [self setContentView:view->toNativeView()];
-    if (menuBar != nullptr) {
-        [self setMenu:menuBar->toNativeMenu()];
-    }
+//    if (menuBar != nullptr) {
+//        [[NSApplication sharedApplication] setMainMenu:menuBar->toNativeMenu()];
+//    }
 }
 
 - (CSWindowCallbacks*) setResizeCallback:(std::function<void()>)resizeCallback closeCallback:(std::function<bool()>)closeCallback {

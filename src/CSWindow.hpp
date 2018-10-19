@@ -28,6 +28,7 @@
 #include "CSMenu.hpp"
 #include "CSAlignView.hpp"
 #include "CSArbitraryView.hpp"
+#include "CSUndoManager.hpp"
 
 #if defined(CS_Mac)
 #include "NSWindow.h"
@@ -95,6 +96,8 @@ public:
       * This is called when the window is resized.
       */
     void relayout();
+    
+    CSUndoManager* undoManager();
 
 #if defined(CS_Mac)
     typedef NSWindow* NativeWindow;

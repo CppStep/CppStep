@@ -26,6 +26,7 @@
 #include "CSKeyCode.hpp"
 
 #if defined(CS_Mac)
+#import "NSFunction.h"
 #import <AppKit/AppKit.h>
 #elif defined(CS_Win)
 #include "WinNativeEventHandler.hpp"
@@ -38,43 +39,35 @@
 #include <string>
 #include <type_traits>
 
-#if defined(CS_Mac)
-class CSMenu;
-
-typedef CSMenu CSMenuBar;
-typedef CSMenu CSContextMenu;
-typedef CSMenu CSSubMenu;
-#elif defined(CS_Win)
 template <bool, bool> class CSMenu;
 
 typedef CSMenu<true, false> CSMenuBar;
 typedef CSMenu<true, true> CSContextMenu;
 typedef CSMenu<false, false> CSSubMenu;
-#endif
 
 class CSMenuItem {
 public:
     CSMenuItem(std::string title, std::function<void()> callback = [](){}, CSKeyCode keyCode = CSKeyCode());
     CSMenuItem(CSSubMenu* subMenu, std::function<void()> callback = [](){}, CSKeyCode keyCode = CSKeyCode());
-
+    
 #if defined(CS_Mac)
     typedef NSMenuItem* NativeMenuItem;
 #elif defined(CS_Win)
     typedef msclr::gcroot<System::Windows::Forms::ToolStripMenuItem^> NativeMenuItem;
 #endif
+    
+    CSMenuItem(NativeMenuItem nativeMenuItem);
+
     virtual NativeMenuItem toNativeMenuItem();
 private:
     NativeMenuItem nativeMenuItem;
-
 #if defined(CS_Mac)
-    CSMenuItem(std::string name, CSKeyCode keyCode);
+    NSFunction* nativeTarget;
 #endif
 };
 
 /** A menu bar. */
-#if defined(CS_Win)
 template <bool isTopLevel = true, bool isContextMenu = false>
-#endif
 class CSMenu {
 public:
 #if defined(CS_Mac)
@@ -91,12 +84,15 @@ private:
 public:
     const std::string name;
     
-    CSMenu(std::string name = "")
+    CSMenu(std::string name = "") : name(name) {
 #if defined(CS_Mac)
-        : nativeMenu([[NSMenu alloc] initWithTitle:@(name.c_str())]),
-          name(name) {}
+        if constexpr (isTopLevel) {
+            nativeMenu = [[NSApplication sharedApplication] mainMenu];
+        } else {
+            nativeMenu = [[NSMenu alloc] initWithTitle:@(name.c_str())];
+            [nativeMenu setAutoenablesItems:YES];
+        }
 #elif defined(CS_Win)
-    {
         if constexpr (isTopLevel) {
             if constexpr (isContextMenu) {
                 nativeMenu = gcnew System::Windows::Forms::ContextMenuStrip();
@@ -107,8 +103,8 @@ public:
         } else {
             nativeMenu = gcnew System::Windows::Forms::ToolStripMenuItem(gcnew System::String(name.c_str()));
         }
-    }
 #endif
+    }
 
     virtual NativeMenu toNativeMenu() {
         return nativeMenu;
