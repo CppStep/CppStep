@@ -85,7 +85,7 @@ public:
 #if defined(CS_Mac)
         return CSKeyCode(std::make_pair([NSString stringWithFormat:@"%c" , NSBackspaceCharacter], 0));
 #elif defined(CS_Win)
-        return CSKeyCode(NativeKeyCode::Back);
+        return CSKeyCode(NativeKeyCode::Back | NativeKeyCode::Control);
 #endif
     }
 };

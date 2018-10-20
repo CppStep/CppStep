@@ -19,6 +19,8 @@
 //You should have received a copy of the GNU General Public License
 //along with CppStep.  If not, see <http://www.gnu.org/licenses/>.
 
+/*
+
 #include "CSWebView.hpp"
 
 CSWebView::CSWebView(std::string contentsTMP) {
@@ -36,3 +38,4 @@ CSView::NativeView CSWebView::toNativeView() {
     return nativeView;
 }
 
+*/

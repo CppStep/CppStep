@@ -33,8 +33,9 @@ void CSApp::Init() {
 #if defined(CS_Mac)
 #elif defined(CS_Win)
     //TODO: Check if these are required as they were in the Mac section
-    ProcessSerialNumber psn = { 0, kCurrentProcess };
-    TransformProcessType( &psn, kProcessTransformToForegroundApplication );
+    // I don't think that they are
+    //ProcessSerialNumber psn = { 0, kCurrentProcess };
+    //TransformProcessType( &psn, kProcessTransformToForegroundApplication );
 #endif
 }
 /** Enter the main runloop */
