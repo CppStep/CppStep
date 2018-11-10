@@ -23,6 +23,7 @@
 #define CSTableViewDataSource_hpp
 
 #include <string>
+#include <optional>
 #include <utility>
 
 /** A data source for a CSTableView */
@@ -36,6 +37,8 @@ public:
       * @param index The index of the column
       */
     virtual std::string getColumnName(int index) = 0;
+    /** Get the name of the header column */
+    virtual std::optional<std::string> headerColumn() { return std::nullopt; };
     /** Get whether the given column is read only
       * @param col The name of the column
       */
@@ -45,7 +48,7 @@ public:
       * @param col The name of the column
       * @param row The index of the row
       */
-    virtual std::string getStringValueInCell(std::string col, std::size_t row, bool editing) = 0;
+    virtual std::string getStringValueInCell(std::string col, std::size_t row) = 0;
     /** Set the value in a given cell
       * @param col   The name of the column
       * @param row   The index of the row

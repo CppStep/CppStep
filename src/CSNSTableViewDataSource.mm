@@ -26,19 +26,6 @@
 @implementation EmptyDelegate
 @end
 
-@implementation CSNSFormatter
-- (NSString*) stringForObjectValue:(id)obj {
-    return @"not editing";
-    NSPair<NSString*, NSString*>* pair = obj;
-    return [pair first];
-}
-- (NSString*) editingStringForObjectValue:(id)obj {
-    return @"editing";
-    NSPair<NSString*, NSString*>* pair = obj;
-    return [pair second];
-}
-@end
-
 @implementation CSNSTableViewDataSource {
     CSTableViewDataSource* dataSource;
 }
@@ -56,11 +43,6 @@
     return !dataSource->isReadOnly([[tableColumn identifier] stdString]);
 }
 
-- (NSCell*) tableView:(NSTableView *)tableView dataCellForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-    NSCell* cell = [[[EmptyDelegate alloc] init] tableView:tableView dataCellForTableColumn:tableColumn row: row+42];
-    [cell setFormatter:[[CSNSFormatter alloc] init]];
-}
-
 - (NSInteger) numberOfRowsInTableView:(NSTableView*)tableView {
     return (NSInteger)dataSource->numberOfRows();
 }
@@ -70,9 +52,7 @@
        row:(NSInteger)rowNS {
     std::string col = [[tableColumn identifier] stdString];
     std::size_t row = (std::size_t)rowNS;
-    return @"test";/*[[NSPair alloc] initWithFirst: [[NSString alloc] initWithStdString: dataSource->getStringValueInCell(col, row, false)]
-                                  second: [[NSString alloc] initWithStdString: dataSource->getStringValueInCell(col, row, true)]
-            ];*/
+    return [[NSString alloc] initWithStdString: dataSource->getStringValueInCell(col, row)];
 }
 
 - (void) tableView:(NSTableView*)tableView

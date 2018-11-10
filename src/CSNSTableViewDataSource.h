@@ -27,19 +27,12 @@
 #import "NSPair.h"
 #import <AppKit/AppKit.h>
 
-@interface CSNSFormatter : NSFormatter
-- (NSString*) stringForObjectValue:(id)obj;
-- (NSString*) editingStringForObjectValue:(id)obj;
-@end
-
 /** An NSTableViewDataSource wrapper for a CSTableViewDataSource */
 @interface CSNSTableViewDataSource : NSObject <NSTableViewDelegate, NSTableViewDataSource>
 
 - (id)initWithDataSource:(CSTableViewDataSource*)dataSourceTMP; /**< Initialise a list of commands with the given instance of the plugin */
 
 - (BOOL)tableView:(NSTableView *)tableView shouldEditTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row; /**< Can edit this cell */
-
-- (NSCell *)tableView:(NSTableView *)tableView dataCellForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row;
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView*)tableView; /**< The number of commands in the list */
 - (id)tableView:(NSTableView*)tableView objectValueForTableColumn:(NSTableColumn*)tableColumn row:(NSInteger)row; /**< Get the value of the command in the given row */

@@ -45,8 +45,28 @@ void CSTableView::setDataSource(CSTableViewDataSource* dataSourceTMP) {
     nativeDataSource = [[CSNSTableViewDataSource alloc] initWithDataSource: dataSource];
     [nativeTableView setDelegate: nativeDataSource];
     [nativeTableView setDataSource: nativeDataSource];
+    
+    for (NSTableColumn* col : [nativeTableView tableColumns]) {
+        [nativeTableView removeTableColumn:col];
+    }
+    for (int i = 0; i < dataSource->numberOfColumns(); i++) {
+        std::string name = dataSource->getColumnName(i);
+        NSTableColumn* col = [[NSTableColumn alloc] initWithIdentifier: [[NSString alloc] initWithStdString:name]];
+        [col setTitle:[[NSString alloc] initWithStdString:name]];
+        [nativeTableView addTableColumn: col];
+    }
 #elif defined(CS_Win)
     nativeView->setDataSource(dataSource);
+    
+    //for (NSTableColumn* col : [nativeTableView tableColumns]) {
+        //[nativeTableView removeTableColumn:col];
+    //}
+    for (int i = 0; i < dataSource->numberOfColumns(); i++) {
+        std::string name = dataSource->getColumnName(i);
+        if (name != dataSource->headerColumn()) {
+            nativeView->addColumn(name);
+        }
+    }
 #endif
 }
 
@@ -58,6 +78,7 @@ void CSTableView::setContextMenu(CSContextMenu* contextMenu) {
 #endif
 }
 
+/*
 void CSTableView::addColumn(std::string name) {
 #if defined(CS_Mac)
     NSTableColumn* column = [[NSTableColumn alloc] initWithIdentifier: [[NSString alloc] initWithStdString:name]];
@@ -67,7 +88,9 @@ void CSTableView::addColumn(std::string name) {
     nativeView->addColumn(name);
 #endif
 }
+ */
 
+/*
 void CSTableView::setHeaderColumn(std::string name) {
 #if defined(CS_Mac)
     NSTableColumn* column = [[NSTableColumn alloc] initWithIdentifier: [[NSString alloc] initWithStdString:name]];
@@ -78,6 +101,7 @@ void CSTableView::setHeaderColumn(std::string name) {
     nativeView->setHeaderColumn(name);
 #endif
 }
+ */
 
 std::size_t CSTableView::getSelectedRow() {
 #if defined(CS_Mac)
@@ -95,6 +119,7 @@ void CSTableView::reload() {
 #if defined(CS_Mac)
     [nativeTableView reloadData];
 #elif defined(CS_Win)
+    nativeView->setHeaderColumn(dataSource->headerColumn());
     nativeView->Refresh();
 #endif
 

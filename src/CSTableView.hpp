@@ -67,12 +67,12 @@ public:
     /** Add a column
       * @param name The name of the column
       */
-    void addColumn(std::string name);
+    //void addColumn(std::string name);
 
     /** Set the given column in the Data Source to be the header
       * @param name The name of the column
       */
-    void setHeaderColumn(std::string name);
+    //void setHeaderColumn(std::string name);
 
     /** Get the index of the currently selected row
       * @return The index of the currently selected row or -1 if no rows are selected
