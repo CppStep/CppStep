@@ -77,7 +77,7 @@ public:
     /** Get the index of the currently selected row
       * @return The index of the currently selected row or -1 if no rows are selected
       */
-    int getSelectedRow();
+    std::size_t getSelectedRow();
 
     /** Reload the data from the data source
       */

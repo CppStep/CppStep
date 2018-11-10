@@ -21,6 +21,24 @@
 
 #import "CSNSTableViewDataSource.h"
 
+@interface EmptyDelegate : NSObject <NSTableViewDelegate>
+@end
+@implementation EmptyDelegate
+@end
+
+@implementation CSNSFormatter
+- (NSString*) stringForObjectValue:(id)obj {
+    return @"not editing";
+    NSPair<NSString*, NSString*>* pair = obj;
+    return [pair first];
+}
+- (NSString*) editingStringForObjectValue:(id)obj {
+    return @"editing";
+    NSPair<NSString*, NSString*>* pair = obj;
+    return [pair second];
+}
+@end
+
 @implementation CSNSTableViewDataSource {
     CSTableViewDataSource* dataSource;
 }
@@ -34,27 +52,40 @@
     }
 }
 
+- (BOOL)tableView:(NSTableView *)tableView shouldEditTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
+    return !dataSource->isReadOnly([[tableColumn identifier] stdString]);
+}
+
+- (NSCell*) tableView:(NSTableView *)tableView dataCellForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
+    NSCell* cell = [[[EmptyDelegate alloc] init] tableView:tableView dataCellForTableColumn:tableColumn row: row+42];
+    [cell setFormatter:[[CSNSFormatter alloc] init]];
+}
+
 - (NSInteger) numberOfRowsInTableView:(NSTableView*)tableView {
     return (NSInteger)dataSource->numberOfRows();
 }
 
 - (id) tableView:(NSTableView*)tableView
        objectValueForTableColumn:(NSTableColumn*)tableColumn
-       row:(NSInteger)row {
-    return @(dataSource->getStringValueInCell([[tableColumn identifier] stdString], (int)row).c_str());
+       row:(NSInteger)rowNS {
+    std::string col = [[tableColumn identifier] stdString];
+    std::size_t row = (std::size_t)rowNS;
+    return @"test";/*[[NSPair alloc] initWithFirst: [[NSString alloc] initWithStdString: dataSource->getStringValueInCell(col, row, false)]
+                                  second: [[NSString alloc] initWithStdString: dataSource->getStringValueInCell(col, row, true)]
+            ];*/
 }
 
 - (void) tableView:(NSTableView*)tableView
          setObjectValue:(id)object
          forTableColumn:(NSTableColumn*)tableColumn
          row:(NSInteger)row {
-    dataSource->setStringValueInCell([[tableColumn identifier] stdString], (int)row, [object stdString]);
+    dataSource->setStringValueInCell([[tableColumn identifier] stdString], (std::size_t)row, [object stdString]);
 }
 
 - (BOOL) tableView:(NSTableView*)tableView
          writeRowsWithIndexes:(NSIndexSet*)rowIndexes
          toPasteboard:(NSPasteboard*)pboard {
-    int row = (int)[rowIndexes firstIndex];
+    std::size_t row = (std::size_t)[rowIndexes firstIndex];
     if (dataSource->canDragFromRow(row)) {
         [pboard declareTypes:@[NSPasteboardTypeString]
                 owner:nil];
@@ -72,7 +103,7 @@
                     proposedDropOperation:(NSTableViewDropOperation)dropOperation {
     switch (dropOperation) {
         case NSTableViewDropOn:
-            if (dataSource->canDropIntoRow((int)row)) {
+            if (dataSource->canDropIntoRow((std::size_t)row)) {
                 return NSDragOperationCopy;
             } else {
                 return NSDragOperationNone;
@@ -88,7 +119,7 @@
          dropOperation:(NSTableViewDropOperation)dropOperation {
     switch (dropOperation) {
         case NSTableViewDropOn:
-            dataSource->dropStringValueInRow((int)row, [[[info draggingPasteboard] stringForType:NSPasteboardTypeString] stdString]);
+            dataSource->dropStringValueInRow((std::size_t)row, [[[info draggingPasteboard] stringForType:NSPasteboardTypeString] stdString]);
             return YES;
         case NSTableViewDropAbove:
             return NO;

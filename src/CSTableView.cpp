@@ -43,8 +43,8 @@ void CSTableView::setDataSource(CSTableViewDataSource* dataSourceTMP) {
     dataSource = dataSourceTMP;
 #if defined(CS_Mac)
     nativeDataSource = [[CSNSTableViewDataSource alloc] initWithDataSource: dataSource];
+    [nativeTableView setDelegate: nativeDataSource];
     [nativeTableView setDataSource: nativeDataSource];
-    //[nativeTableView setDelegate: nativeDataSource];
 #elif defined(CS_Win)
     nativeView->setDataSource(dataSource);
 #endif
@@ -79,12 +79,12 @@ void CSTableView::setHeaderColumn(std::string name) {
 #endif
 }
 
-int CSTableView::getSelectedRow() {
+std::size_t CSTableView::getSelectedRow() {
 #if defined(CS_Mac)
-    return (int)[nativeTableView selectedRow];
+    return (std::size_t)[nativeTableView selectedRow];
 #elif defined(CS_Win)
     if (nativeView->SelectedRows->Count > 0) {
-        return nativeView->SelectedRows[0]->Index;
+        return (std::size_t)nativeView->SelectedRows[0]->Index;
     } else {
         return -1;
     }

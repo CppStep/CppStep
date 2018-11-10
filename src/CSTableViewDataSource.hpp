@@ -45,35 +45,35 @@ public:
       * @param col The name of the column
       * @param row The index of the row
       */
-    virtual std::string getStringValueInCell(std::string col, int row) = 0;
+    virtual std::string getStringValueInCell(std::string col, std::size_t row, bool editing) = 0;
     /** Set the value in a given cell
       * @param col   The name of the column
       * @param row   The index of the row
       * @param value The new value to put in the cell
       */
-    virtual void setStringValueInCell(std::string col, int row, std::string value) {
+    virtual void setStringValueInCell(std::string col, std::size_t row, std::string value) {
         throw "Not Implemented";
     }
     /** Get whether a value can be dragged from a given row
       * @param row The index of the row
       */
-    virtual bool canDragFromRow(int row) { return false; }
+    virtual bool canDragFromRow(std::size_t row) { return false; }
     /** Get whether a value can be dropped into a given row
       * @param row The index of the row
       */
-    virtual bool canDropIntoRow(int row) { return false; }
+    virtual bool canDropIntoRow(std::size_t row) { return false; }
     /** Get the value to be dragged from a given row
       * @return    The string value to be dragged
       * @param row The index of the row
       */
-    virtual std::string dragStringValueFromRow(int row) {
+    virtual std::string dragStringValueFromRow(std::size_t row) {
         throw "Not Implemented";
     }
     /** Set the value to be dropped into a given row
       * @param row   The index of the row
       * @param value The string value to be droppped
       */
-    virtual void dropStringValueInRow(int row, std::string value) {
+    virtual void dropStringValueInRow(std::size_t row, std::string value) {
         throw "Not Implemented";
     }
 };
