@@ -28,6 +28,10 @@
 #import "NSString.h"
 #import <AppKit/AppKit.h>
 #elif defined(CS_Win)
+#include "WinString.hpp"
+
+#using <System.dll>
+#using <System.Windows.Forms.dll>
 #include <msclr\gcroot.h>
 #endif
 

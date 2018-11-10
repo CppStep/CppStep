@@ -43,5 +43,16 @@ int CSDialog::show(std::string title,
             return -1;
     }
 #elif defined(CS_Win)
+    msclr::gcroot<System::Windows::Forms::Form^> dialog = gcnew System::Windows::Forms::Form();
+    dialog->Text = WinString::toSysString(title);
+    msclr::gcroot<System::Windows::Forms::Label^> messageLab = gcnew System::Windows::Forms::Label();
+    messageLab->Text = WinString::toSysString(message);
+    dialog->Controls->Add(messageLab);
+    for (std::string button : buttons) {
+        msclr::gcroot<System::Windows::Forms::Button^> buttonWidget = gcnew System::Windows::Forms::Button();
+        buttonWidget->Text = WinString::toSysString(button);
+        dialog->Controls->Add(messageLab);
+    }
+    return 0;
 #endif
 }
