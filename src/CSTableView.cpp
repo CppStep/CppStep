@@ -119,7 +119,9 @@ void CSTableView::reload() {
 #if defined(CS_Mac)
     [nativeTableView reloadData];
 #elif defined(CS_Win)
-    nativeView->setHeaderColumn(dataSource->headerColumn());
+    if (dataSource->headerColumn()) {
+        nativeView->setHeaderColumn(dataSource->headerColumn().value());
+    }
     nativeView->Refresh();
 #endif
 
