@@ -44,6 +44,12 @@ CSWindow::CSWindow(CSRect rect,
 #endif
 }
 
+CSWindow::~CSWindow() {
+    hide();
+    delete nativeWindow;
+    delete this;
+}
+
 void CSWindow::show() {
 #if defined(CS_Mac)
     [nativeWindow makeKeyAndOrderFront:nil];

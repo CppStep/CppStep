@@ -47,6 +47,8 @@ void CSApp::Run(bool isMain) {
     [[NSApplication sharedApplication] setActivationPolicy:NSApplicationActivationPolicyRegular];//Accessory];
     [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
 #elif defined(CS_Win)
-    System::Windows::Forms::Application::Run();
+    if (isMain) {
+        System::Windows::Forms::Application::Run();
+    }
 #endif
 }

@@ -72,6 +72,8 @@ public:
              bool resizable
              );
 
+    virtual ~CSWindow();
+
     /** Show the window */
     void show();
     /** Hide the window.
