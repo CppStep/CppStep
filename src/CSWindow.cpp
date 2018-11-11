@@ -49,6 +49,7 @@ void CSWindow::show() {
     [nativeWindow makeKeyAndOrderFront:nil];
 #elif defined(CS_Win)
     nativeWindow->Show();
+    nativeWindow->BringToFront();
 #endif
 }
 
