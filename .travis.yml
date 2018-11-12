@@ -18,7 +18,7 @@ env:
 
 # Install dependencies
 addons:
-  brew:
+  homebrew:
     packages:
       - doxygen
       - doxygen-doc
