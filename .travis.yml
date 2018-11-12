@@ -1,6 +1,9 @@
 # This will run on Travis' 'new' container-based infrastructure
 sudo: false
 
+osx_image: xcode 10.1
+language: c++
+
 # Blacklist
 branches:
   except:
@@ -8,14 +11,14 @@ branches:
 
 
 # Install dependencies
-addons:
-  apt:
-    packages:
-      - doxygen
-      - doxygen-doc
-      - doxygen-latex
-      - doxygen-gui
-      - graphviz
+#addons:
+#  apt:
+#    packages:
+#      - doxygen
+#      - doxygen-doc
+#      - doxygen-latex
+#      - doxygen-gui
+#      - graphviz
 
 # Build your code e.g. by calling make
 #script:
