@@ -1,6 +1,7 @@
 # This will run on Travis' 'new' container-based infrastructure
 sudo: false
 
+os: osx
 osx_image: xcode 10.1
 language: c++
 
@@ -16,14 +17,14 @@ env:
     - GH_REPO_REF: github.com/CppStep/CppStep.git
 
 # Install dependencies
-#addons:
-#  apt:
-#    packages:
-#      - doxygen
-#      - doxygen-doc
-#      - doxygen-latex
-#      - doxygen-gui
-#      - graphviz
+addons:
+  brew:
+    packages:
+      - doxygen
+      - doxygen-doc
+      - doxygen-latex
+      - doxygen-gui
+      - graphviz
 
 # Build your code e.g. by calling make
 script:
