@@ -18,5 +18,6 @@ cd docs/html
 
 touch .nojekyll
 
+git add .
 git commit -m "Deploy code docs to GitHub Pages Travis build: ${TRAVIS_BUILD_NUMBER}" -m "Commit: ${TRAVIS_COMMIT}"
 git push --force "https://${GH_REPO_TOKEN}@${GH_REPO_REF}"
