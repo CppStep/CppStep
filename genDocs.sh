@@ -14,7 +14,7 @@ git config user.email "travis@travis-ci.org"
 
 doxygen
 
-cd docs/html
+cd docs
 
 touch .nojekyll
 
