@@ -9,6 +9,11 @@ branches:
   except:
     - gh-pages
 
+# Environment variables
+env:
+  global:
+    - GH_REPO_NAME: CppStep
+    - GH_REPO_REF: github.com/CppStep/CppStep.git
 
 # Install dependencies
 #addons:
